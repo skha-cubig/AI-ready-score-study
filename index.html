@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -12,8 +12,6 @@
 <style>
 :root{
   color-scheme: only light;
-
-  /* 종이와 잉크 */
   --paper:#FCFAF6; --paper2:#F5F1E9; --white:#FFFFFF;
   --ink:#191713;
   --t-title:#191713;
@@ -21,25 +19,19 @@
   --t-body:rgba(25,23,19,.74);
   --t-mute:rgba(25,23,19,.56);
   --t-faint:rgba(25,23,19,.36);
-
-  /* 강조색 */
   --v:#5B49D8; --v-lt:#8477EC; --v-dp:#4335B4;
   --v-05:rgba(91,73,216,.05);
   --v-09:rgba(91,73,216,.09);
   --v-16:rgba(91,73,216,.16);
   --red:#C42B52; --red-06:rgba(196,43,82,.06); --red-24:rgba(196,43,82,.24);
   --grn:#0D7A4E; --grn-06:rgba(13,122,78,.06); --grn-24:rgba(13,122,78,.24);
-  --amb:#A85B10; --amb-06:rgba(168,91,16,.07);
-
+  --amb:#A85B10;
   --line:rgba(25,23,19,.11);
   --hair:rgba(25,23,19,.065);
-
-  /* 밤 슬라이드 */
   --night:#17161D; --night2:#1F1E27;
   --nt:#FBF9F4; --nt-body:rgba(251,249,244,.72); --nt-mute:rgba(251,249,244,.50);
   --nt-line:rgba(251,249,244,.14);
   --nt-v:#B6A9FF;
-
   --f:'Pretendard Variable',ui-sans-serif,system-ui,-apple-system,sans-serif;
   --m:'JetBrains Mono','Courier New',monospace;
   --W:1440px; --H:810px; --RAIL:266px; --PAD:64px; --GAP:34px;
@@ -51,28 +43,29 @@ body{background:#E9E5DC; color:var(--t-body); font-family:var(--f);
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
 b,strong{font-weight:700;color:var(--t-strong)}
 em{font-style:normal}
+code,.mono{font-family:var(--m); font-size:.94em; letter-spacing:0}
 
-/* ══════════ 무대 ══════════ */
 #stage{position:fixed; inset:0; display:grid; place-items:center}
 #deck{width:var(--W); height:var(--H); position:relative; transform-origin:center center;
   background:var(--paper); border-radius:4px;
   box-shadow:0 24px 70px rgba(25,23,19,.18), 0 0 0 1px rgba(25,23,19,.07)}
 
-/* ══════════ 슬라이드 ══════════ */
-.s{position:absolute; inset:0; padding:58px var(--PAD) 66px; background:var(--paper);
+.s{position:absolute; inset:0; padding:58px var(--PAD) 74px; background:var(--paper);
   opacity:0; visibility:hidden; pointer-events:none; transition:opacity .24s ease;
   display:flex; flex-direction:column; border-radius:4px}
 .s.on{opacity:1; visibility:visible; pointer-events:auto}
 .hd{flex:0 0 auto; margin-bottom:26px}
-.bd{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center}
-/* 주석이 앉을 오른쪽 여백은 모든 슬라이드에서 늘 비워 둔다 */
+.bd{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center;
+  overflow:hidden}
+/* 내용이 넘치면 이 래퍼를 통째로 축소해 잘리는 일이 없게 한다.
+   flex:0 0 auto가 없으면 래퍼가 스스로 줄어들어 넘침을 감지하지 못하고,
+   가운데 정렬 때문에 위아래가 동시에 잘린다. */
+.fit{flex:0 0 auto; width:100%; transform-origin:top center}
 .cw{width:calc(var(--W) - var(--PAD)*2 - var(--RAIL) - var(--GAP))}
 
-/* 밤 슬라이드 */
 .s.dk{background:var(--night); color:var(--nt-body)}
 .s.dk b,.s.dk strong,.s.dk h1,.s.dk h2,.s.dk .h3{color:var(--nt)}
 
-/* ── 머리말 ── */
 .eb{font-family:var(--m); font-size:10.5px; font-weight:500; letter-spacing:.18em;
   text-transform:uppercase; color:var(--v); display:inline-block; margin-bottom:12px;
   padding-left:13px; position:relative}
@@ -83,14 +76,11 @@ h2{font-size:35px; font-weight:650; letter-spacing:-.042em; line-height:1.18; co
 .lead{font-size:15.5px; line-height:1.68; color:var(--t-mute); margin-top:13px; max-width:920px}
 .s.dk .lead{color:var(--nt-mute)}
 
-/* ── 그리드 ── */
 .g2{display:grid; grid-template-columns:1fr 1fr; gap:20px}
 .g3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px}
 .g22{display:grid; grid-template-columns:1fr 1fr; gap:18px 20px}
-.g21{display:grid; grid-template-columns:1.15fr .85fr; gap:20px}
 .stack>*+*{margin-top:16px}
 
-/* ── 카드 ── */
 .card{border:1px solid var(--line); border-radius:14px; padding:20px 22px; background:var(--white)}
 .card.sh{background:transparent; border-color:var(--hair); box-shadow:inset 0 0 0 100vmax rgba(25,23,19,.018)}
 .card.ac{border-color:rgba(91,73,216,.26); background:var(--v-05)}
@@ -113,12 +103,13 @@ h2{font-size:35px; font-weight:650; letter-spacing:-.042em; line-height:1.18; co
 .s.dk .tx{color:var(--nt-body)}
 .mutetx{color:var(--t-faint)}
 
-/* ── 표 ── */
 table{width:100%; border-collapse:collapse; font-size:13.4px; line-height:1.55}
+table.sm{font-size:12.7px}
 th{font-family:var(--m); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase;
   color:var(--t-faint); font-weight:500; text-align:left;
   padding:0 13px 9px; border-bottom:1.5px solid var(--line)}
 td{padding:11px 13px; border-bottom:1px solid var(--hair); vertical-align:top; color:var(--t-body)}
+table.sm td{padding:9px 13px}
 tr:last-child td{border-bottom:0}
 td.lb{font-weight:650; color:var(--t-strong); white-space:nowrap}
 td.mo{font-family:var(--m); font-size:11.6px; color:var(--v-dp); white-space:nowrap}
@@ -134,7 +125,6 @@ tr.hi td:first-child{border-radius:8px 0 0 8px} tr.hi td:last-child{border-radiu
 .p-mix{background:rgba(25,23,19,.06); color:var(--t-mute)}
 .p-v{background:var(--v-16); color:var(--v-dp)}
 
-/* ── 목록 ── */
 ul.li{list-style:none}
 ul.li li{position:relative; padding-left:17px; font-size:13.6px; line-height:1.72;
   margin-bottom:10px; color:var(--t-body)}
@@ -142,10 +132,7 @@ ul.li li:last-child{margin-bottom:0}
 ul.li li::before{content:''; position:absolute; left:2px; top:9.5px; width:4.5px; height:4.5px;
   border-radius:50%; background:var(--v); opacity:.75}
 .s.dk ul.li li{color:var(--nt-body)}
-ul.li.qa li::before{display:none}
-ul.li.qa li{padding-left:0}
 
-/* ── 흐름도 ── */
 .flow{display:flex; align-items:stretch; gap:0}
 .fb{flex:1; border:1px solid var(--line); border-radius:13px; padding:16px 18px; background:var(--white)}
 .fa{flex:0 0 30px; display:grid; place-items:center; font-size:14px; color:var(--t-faint)}
@@ -156,20 +143,17 @@ ul.li.qa li{padding-left:0}
 .step.bad .sn{background:rgba(196,43,82,.11); color:var(--red)}
 .step.ok .sn{background:rgba(13,122,78,.11); color:var(--grn)}
 
-/* ── 배너 ── */
 .bn{border-radius:12px; padding:15px 19px; font-size:13.6px; line-height:1.68}
 .bn.v{background:var(--v-09); border:1px solid rgba(91,73,216,.24); color:var(--t-strong)}
 .bn.r{background:var(--red-06); border:1px solid var(--red-24); color:var(--t-strong)}
 .bn.g{background:var(--grn-06); border:1px solid var(--grn-24); color:var(--t-strong)}
 .s.dk .bn.v{color:var(--nt); background:rgba(140,124,255,.16); border-color:rgba(140,124,255,.36)}
 
-/* ── 계산 블록 ── */
 .mb{font-family:var(--m); font-size:12.2px; line-height:1.92; background:var(--paper2);
   border:1px solid var(--hair); border-radius:13px; padding:17px 19px; color:var(--t-strong);
   white-space:pre-wrap}
 .mb .dn{color:var(--red)} .mb .up{color:var(--grn)} .mb .mu{color:var(--t-faint)}
 
-/* ── 표지 ── */
 .cov{display:flex; flex-direction:column; justify-content:center; height:100%}
 .cov h1{font-size:68px; font-weight:700; letter-spacing:-.05em; line-height:1.05; color:var(--nt)}
 .cov .sub{font-size:18px; color:var(--nt-mute); margin-top:22px; letter-spacing:-.025em; line-height:1.6}
@@ -178,14 +162,81 @@ ul.li.qa li{padding-left:0}
 .cov .meta .k{color:rgba(251,249,244,.38)}
 .cov .meta .v{font-size:13.5px; color:var(--nt); font-weight:500}
 
-/* ── 바닥글 ── */
-.foot{position:absolute; left:var(--PAD); right:var(--PAD); bottom:26px; display:flex;
-  align-items:center; gap:12px; font-family:var(--m); font-size:9.5px;
-  letter-spacing:.13em; text-transform:uppercase; color:var(--t-faint)}
-.foot .ln{flex:1; height:1px; background:var(--hair)}
-.s.dk .foot{color:rgba(251,249,244,.32)} .s.dk .foot .ln{background:rgba(251,249,244,.12)}
+/* ══ Q&A 블록 ══ */
+.qa{border:1px solid rgba(91,73,216,.24); background:var(--v-05); border-radius:14px;
+  padding:17px 20px 18px}
+.qa+.qa{margin-top:14px}
+.qa .q{font-size:14.5px; font-weight:650; letter-spacing:-.032em; color:var(--v-dp);
+  line-height:1.42; padding-left:21px; position:relative}
+.qa .q::before{content:'Q'; position:absolute; left:0; top:0; font-family:var(--m);
+  font-size:12px; font-weight:600; color:var(--v)}
+.qa .an-a{font-size:13.4px; line-height:1.72; color:var(--t-body); margin-top:9px;
+  padding-left:21px; position:relative}
+.qa .an-a::before{content:'A'; position:absolute; left:0; top:1px; font-family:var(--m);
+  font-size:11.5px; font-weight:600; color:var(--t-faint)}
+.qa .an-a+.an-a{margin-top:7px; padding-left:21px}
+.qa .an-a+.an-a::before{content:''}
+.s.dk .qa{border-color:rgba(140,124,255,.34); background:rgba(140,124,255,.12)}
+.s.dk .qa .q{color:var(--nt-v)} .s.dk .qa .an-a{color:var(--nt-body)}
 
-/* ══════════ 주석 단어 ══════════ */
+/* ══ 예시 카드 ══ */
+.ex{border:1px solid var(--hair); background:var(--paper2); border-radius:12px; padding:15px 17px}
+.ex .exk{font-family:var(--m); font-size:9px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--amb); display:block; margin-bottom:8px; font-weight:500}
+.ex p{font-size:12.8px; line-height:1.7; color:var(--t-body)}
+.ex p+p{margin-top:6px}
+.s.dk .ex{background:rgba(251,249,244,.05); border-color:rgba(251,249,244,.1)}
+.s.dk .ex p{color:var(--nt-body)}
+
+/* 인용 */
+.quo{border-left:2px solid rgba(91,73,216,.4); padding:2px 0 2px 13px; margin-top:10px;
+  font-size:12.8px; line-height:1.7; color:var(--t-mute)}
+.quo b{color:var(--t-strong)}
+.s.dk .quo{border-color:rgba(140,124,255,.5); color:var(--nt-mute)}
+
+/* ══ 파트 전환 페이지 ══ */
+.pv{display:flex; flex-direction:column; justify-content:center; height:100%;
+  position:relative; overflow:hidden}
+.pvnum{position:absolute; right:0; top:50%; transform:translateY(-50%);
+  font-family:var(--m); font-size:280px; font-weight:600; line-height:1;
+  color:rgba(251,249,244,.045); letter-spacing:-.06em; pointer-events:none; user-select:none}
+.pvh{font-size:52px; font-weight:700; letter-spacing:-.048em; line-height:1.08; color:var(--nt)}
+.pvs{font-size:17px; color:var(--nt-mute); margin-top:16px; letter-spacing:-.02em; line-height:1.6}
+.pvg{display:grid; grid-template-columns:1fr 1.25fr 1fr; gap:18px; margin-top:40px}
+.pvc{border:1px solid var(--nt-line); border-radius:14px; padding:18px 20px; background:var(--night2)}
+.pvc.now{border-color:rgba(140,124,255,.45); background:rgba(140,124,255,.13)}
+.pvc .k{color:rgba(251,249,244,.4)} .pvc.now .k{color:var(--nt-v)}
+.pvc p{font-size:13.4px; line-height:1.72; color:var(--nt-body); margin-top:3px}
+.pvc.now p{color:rgba(251,249,244,.88)}
+.pvl{display:flex; gap:8px; margin-top:26px; padding-top:22px; border-top:1px solid var(--nt-line)}
+.pvi{flex:1; min-width:0}
+.pvi .pn{font-family:var(--m); font-size:9.5px; letter-spacing:.12em; color:rgba(251,249,244,.34)}
+.pvi .pt{font-size:12.8px; font-weight:600; letter-spacing:-.03em; color:var(--nt); margin-top:6px; line-height:1.38}
+.pvi .pd{font-size:11.6px; line-height:1.62; color:rgba(251,249,244,.52); margin-top:5px}
+
+/* ══ 바닥 진행 막대 ══ */
+.foot{position:absolute; left:var(--PAD); right:var(--PAD); bottom:24px;
+  display:flex; align-items:flex-end; gap:16px}
+.pb{flex:1; display:flex; gap:7px; min-width:0}
+.pseg{min-width:0}
+.pseg i{display:block; height:2.5px; border-radius:2px; background:rgba(25,23,19,.10);
+  position:relative; overflow:hidden}
+.pseg i::after{content:''; position:absolute; left:0; top:0; bottom:0; width:var(--p,0%);
+  background:var(--v); border-radius:2px}
+.pseg em{display:block; margin-top:7px; font-size:9.5px; letter-spacing:-.01em;
+  color:var(--t-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.pseg.done i::after{width:100%; background:rgba(91,73,216,.30)}
+.pseg.cur em{color:var(--v); font-weight:650}
+.pnum{font-family:var(--m); font-size:9.5px; letter-spacing:.13em; color:var(--t-faint);
+  white-space:nowrap; padding-bottom:1px}
+.s.dk .pseg i{background:rgba(251,249,244,.13)}
+.s.dk .pseg i::after{background:var(--nt-v)}
+.s.dk .pseg.done i::after{background:rgba(182,169,255,.34)}
+.s.dk .pseg em{color:rgba(251,249,244,.32)}
+.s.dk .pseg.cur em{color:var(--nt-v)}
+.s.dk .pnum{color:rgba(251,249,244,.32)}
+
+/* ══ 주석 단어 ══ */
 .an{cursor:pointer; border-bottom:1px dashed rgba(91,73,216,.45); color:inherit;
   padding:0 1px; border-radius:2px; transition:background .15s, border-color .15s; position:relative}
 .an::after{content:''; display:inline-block; width:3.5px; height:3.5px; border-radius:50%;
@@ -196,14 +247,36 @@ ul.li.qa li{padding-left:0}
 .s.dk .an:hover{background:rgba(182,169,255,.15)}
 .s.dk .an.act{background:rgba(182,169,255,.22); border-bottom-color:var(--nt-v)}
 
-/* ══════════ 주석 카드 ══════════ */
-.rail{position:absolute; right:var(--PAD); top:58px; bottom:66px; width:var(--RAIL)}
-.rail .hint{font-family:var(--m); font-size:9px; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--t-faint); position:absolute; bottom:0; right:0; text-align:right; line-height:1.9;
-  opacity:1; transition:opacity .2s}
-.rail.busy .hint{opacity:0}
-.s.dk .rail .hint{color:rgba(251,249,244,.28)}
+/* ══ 오른쪽 여백 ══ */
+.rail{position:absolute; right:var(--PAD); top:58px; bottom:74px; width:var(--RAIL)}
 
+/* 좌표 카드 — 주석이 열리면 비켜난다 */
+.oc{position:absolute; left:0; top:0; width:var(--RAIL);
+  border:1px solid var(--line); border-radius:13px; background:var(--white);
+  padding:15px 17px 16px; transition:opacity .2s ease}
+.rail.busy .oc{opacity:0; pointer-events:none}
+.s.dk .oc{background:var(--night2); border-color:var(--nt-line)}
+.oc .ocp{font-family:var(--m); font-size:8.5px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--v-dp); background:var(--v-09); padding:3px 7px; border-radius:5px;
+  display:inline-block; font-weight:500}
+.s.dk .oc .ocp{color:var(--nt-v); background:rgba(140,124,255,.18)}
+.oc .oct{font-size:13.5px; font-weight:650; letter-spacing:-.03em; color:var(--t-title);
+  margin:10px 0 0; line-height:1.38}
+.s.dk .oc .oct{color:var(--nt)}
+.oc .ocr{height:1px; background:var(--hair); margin:13px 0 12px}
+.s.dk .oc .ocr{background:rgba(251,249,244,.11)}
+.oc .ocb+.ocb{margin-top:11px}
+.oc .ocl{display:block; font-family:var(--m); font-size:8.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--t-faint); margin-bottom:5px; font-weight:500}
+.s.dk .oc .ocl{color:rgba(251,249,244,.36)}
+.oc .ocb p{font-size:11.8px; line-height:1.66; color:var(--t-body)}
+.oc .ocb p b{font-weight:650}
+.s.dk .oc .ocb p{color:var(--nt-body)}
+.oc .ochint{margin-top:13px; padding-top:11px; border-top:1px dashed var(--hair);
+  font-size:10.5px; line-height:1.6; color:var(--t-faint)}
+.s.dk .oc .ochint{color:rgba(251,249,244,.3); border-color:rgba(251,249,244,.11)}
+
+/* 주석 카드 */
 .note{position:absolute; left:0; width:var(--RAIL); background:var(--white);
   border:1px solid var(--line); border-radius:13px; padding:14px 16px 15px 18px;
   box-shadow:0 8px 26px rgba(25,23,19,.10); overflow:hidden;
@@ -230,7 +303,7 @@ svg.wires circle{fill:var(--v)}
 @keyframes draw{to{stroke-dashoffset:0}}
 .s.dk svg.wires path{stroke:rgba(182,169,255,.65)} .s.dk svg.wires circle{fill:var(--nt-v)}
 
-/* ══════════ 조작부 ══════════ */
+/* ══ 조작부 ══ */
 #bar{position:fixed; top:0; left:0; height:2px; background:var(--v); z-index:200; transition:width .3s ease}
 #hud{position:fixed; bottom:20px; right:22px; z-index:200; display:flex; align-items:center;
   gap:8px; background:rgba(255,255,255,.94); backdrop-filter:blur(14px);
@@ -246,18 +319,23 @@ svg.wires circle{fill:var(--v)}
   letter-spacing:.09em; text-transform:uppercase}
 
 #ov{position:fixed; inset:0; z-index:300; background:rgba(252,250,246,.975);
-  backdrop-filter:blur(22px); padding:46px 52px; overflow:auto; display:none}
+  backdrop-filter:blur(22px); padding:40px 52px; overflow:auto; display:none}
 #ov.on{display:block}
 #ov .oh{font-family:var(--m); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--v); margin-bottom:22px}
-#ovl{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:9px}
-#ovl a{display:flex; gap:12px; align-items:baseline; padding:12px 14px; border-radius:11px;
+  color:var(--v); margin-bottom:20px}
+.grp{margin-bottom:20px}
+.grp .gh{display:flex; align-items:baseline; gap:10px; margin-bottom:9px}
+.grp .gn{font-family:var(--m); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--v); font-weight:500}
+.grp .gt{font-size:14px; font-weight:650; letter-spacing:-.03em; color:var(--t-title)}
+.grp .gw{font-size:11.5px; color:var(--t-faint); margin-left:auto}
+.grp .gl{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px}
+.grp a{display:flex; gap:11px; align-items:baseline; padding:11px 13px; border-radius:11px;
   border:1px solid var(--line); text-decoration:none; background:var(--white); cursor:pointer}
-#ovl a:hover{border-color:var(--v); background:var(--v-05)}
-#ovl a.cur{border-color:var(--v); background:var(--v-09)}
-#ovl .n{font-family:var(--m); font-size:10px; color:var(--t-faint); flex:0 0 20px}
-#ovl .t{font-size:13px; color:var(--t-title); font-weight:500; line-height:1.42}
-#ovl .g{font-size:9.5px; color:var(--t-faint); margin-left:auto; font-family:var(--m)}
+.grp a:hover{border-color:var(--v); background:var(--v-05)}
+.grp a.cur{border-color:var(--v); background:var(--v-09)}
+.grp .n{font-family:var(--m); font-size:10px; color:var(--t-faint); flex:0 0 18px}
+.grp .t{font-size:12.6px; color:var(--t-title); font-weight:500; line-height:1.42}
 
 #help{position:fixed; bottom:20px; left:22px; z-index:200; font-family:var(--m);
   font-size:9.5px; letter-spacing:.06em; color:var(--t-mute); line-height:1.9;
@@ -283,7 +361,7 @@ svg.wires circle{fill:var(--v)}
 <div id="stage"><div id="deck"></div></div>
 
 <div id="hud">
-  <span class="num"><b id="cur">1</b> / <span id="tot">28</span></span>
+  <span class="num"><b id="cur">1</b> / <span id="tot">40</span></span>
   <button class="toc" id="btoc">목차</button>
   <button id="bprev">‹</button>
   <button id="bnext">›</button>
@@ -291,7 +369,7 @@ svg.wires circle{fill:var(--v)}
 
 <div id="help">
   <b>←/→</b> 이동 &nbsp; <b>O</b> 목차 &nbsp; <b>F</b> 전체화면 &nbsp; <b>ESC</b> 주석 닫기<br>
-  점선 밑줄이 그어진 단어를 클릭하면 오른쪽에 설명이 붙습니다
+  오른쪽 카드가 지금 어디쯤인지 알려주고, 점선 단어를 클릭하면 그 자리에 설명이 붙습니다
 </div>
 
 <div id="ov">
@@ -300,6 +378,20 @@ svg.wires circle{fill:var(--v)}
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════════════
+   파트 구성 — 문서를 7개 묶음으로 나눈다
+   ═══════════════════════════════════════════════════════════ */
+const PARTS = [
+  {t:'1~2장 · 구조와 요약',  lab:'1·2 구조'},
+  {t:'3장 · 기초 용어',      lab:'3 용어'},
+  {t:'4장 · 1단계 진단',     lab:'4 진단'},
+  {t:'5장 · 2단계 전처리',   lab:'5 전처리'},
+  {t:'6장 · 3단계 점수',     lab:'6 점수'},
+  {t:'7~8장 · 어긋남',       lab:'7·8 어긋남'},
+  {t:'9장 · Proof Run',     lab:'9 Proof Run'},
+  {t:'10장 · 미결 쟁점',     lab:'10 쟁점'}
+];
+
 /* ═══════════════════════════════════════════════════════════
    주석 사전
    근거: 2026-08-06 발표 및 논의, Confluence GST/492011547
@@ -383,527 +475,717 @@ gener:['내부 용어','범용 전처리','어떤 데이터에든 적용하면 �
 dts:['제품','DTS','데이터를 합성 데이터로 변환하는 우리 기술입니다.','Syntitan이 차별점을 갖는 이유가 결국 DTS가 합쳐졌기 때문이라는 의견이 회의에서 나왔고, DTS의 가치를 점수 산식에 가중해 넣는 방향도 검토 대상입니다.'],
 relstate:['기능','Release State','정제된 데이터 상태를 봉인해서 나중에 그대로 꺼낼 수 있게 만드는 기능입니다.','Traceability 축의 체크리스트 항목 중 하나로 들어갑니다.'],
 quick:['에이전트','Quick Eval','빠른 기계학습 검증 실험을 설계하는 에이전트입니다. 10번 노드에서 동작합니다.','"이 데이터를 이대로 쓰면 어떤 위험이 있나"를 정리하는 리스크 분석과 함께 진행됩니다.'],
+idx:['용어','idx · 단순 순번 컬럼','각 줄을 구분하기 위한 주민등록번호 같은 역할만 하는 열입니다. 행 번호 1, 2, 3이나 USER_001, ORD-99381 같은 것들이죠.','정답을 맞히는 데는 아무 쓸모가 없습니다. AI가 이걸 힌트로 착각하면 <em>"회원번호가 100번대인 사람들이 주로 탈퇴하는구나"</em>라는 엉터리 규칙을 만들어 버립니다. 그래서 4번 노드가 미리 딱지를 붙여 학습에서 빼둡니다.'],
+semantic4:['관점','Identity · Quality · Anomaly · Relevance','Semantic 에이전트가 컬럼 하나를 설명할 때 거치는 네 관점입니다. 나이 컬럼을 예로 들면 이렇게 흘러갑니다.','<em>Identity</em> 이 숫자는 무작위 기호가 아니라 가입 고객의 실제 나이다. <em>Quality</em> 빈칸이 5% 정도 있지만 분석에 무리는 없다. <em>Anomaly</em> 999살, -5살 같은 값이 3건 섞여 있어 조치가 필요하다. <em>Relevance</em> 나이는 이탈 예측에 매우 핵심적이다.','네 관점이 한 흐름으로 이어지면서 사람이 쓴 분석 리포트처럼 완성됩니다.'],
+dsmeta:['노드','데이터셋 요약 48항목','표 전체의 종합 요약서입니다. 8번 노드가 씁니다.','왜 원본을 매번 읽지 않고 요약본을 만들어 두는가. 세 가지 이유입니다. 첫째, LLM이 한 번에 읽는 <em>토큰에 한계</em>가 있어 수만 줄을 통째로 주면 과부하가 걸립니다. 둘째, 뒤의 10·11번 노드가 매번 원본을 다시 읽으면 <em>시간과 비용</em>이 어마어마해집니다. 셋째, 리스크와 거버넌스 판단은 숫자 하나하나가 아니라 <em>숲을 봐야</em> 하므로 요약서가 더 유용합니다.'],
+catmerge:['방식','범주 통합','등장 횟수가 너무 적은 자잘한 항목들을 기타로 묶는 작업입니다. IVM이 합니다.','가입 경로가 네이버 5,000명, 인스타 4,500명, 지인 추천 490명, 전단지 5명, 잘못 클릭 3명, 블로그 이웃 2명이라고 해봅시다. AI는 고작 3~5명을 보고 <em>"전단지로 가입한 사람은 무조건 탈퇴하는구나"</em>라는 과적합을 일으킵니다.','1%도 안 되는 항목을 기타로 묶으면 네 종류로 깔끔해지고, AI가 주력 패턴에만 집중할 수 있습니다.'],
+binning:['방식','구간화 파생변수','연속된 숫자를 그룹으로 묶는 것입니다. CAM의 원래 설계에 포함되어 있었습니다.','나이가 23, 27, 29, 31, 35처럼 파편화되어 있으면 패턴을 찾기 어렵습니다. 20대, 30대라는 구간으로 묶어 새 컬럼을 만들면 훨씬 큰 틀에서 맥락을 짚어냅니다.'],
+combo:['방식','컬럼 조합 생성','기존 컬럼 두 개를 섞어 더 의미 있는 새 힌트를 만드는 것입니다. CAM의 원래 설계에 포함되어 있었습니다.','키와 몸무게가 각각 따로 있을 때보다, 둘을 계산해 <em>BMI</em>라는 새 컬럼을 만들어 주면 질병 예측이 훨씬 빠르고 정확해집니다.'],
+qeval:['설계','Quick Eval이 정하는 세 가지','본격 학습 전에 이 데이터가 쓸모 있는지 확인할 미니 모의고사를 설계합니다.','첫째, 무겁고 비싼 딥러닝 대신 <em>가볍고 빠른 기본 모델</em>을 고릅니다. 둘째, 1만 줄이면 8천은 학습용, 2천은 검증용처럼 <em>쪼개는 비율</em>을 정합니다. 셋째, <em>정답률 60% 이상</em> 같은 합격선을 세웁니다.'],
 gov:['노드','governance_metadata_node','거버넌스 권고와 전처리 제안을 남기는 11번 노드입니다.','지금은 사용자 화면으로 연결되는 선이 끊어져 있습니다. 그런데 이 노드가 판별한 개인정보 여부는 <em>Usability 점수를 결정하는 유일한 재료</em>로 쓰입니다. 화면에 안 보일 뿐 내부 계산에는 100% 쓰이고 있는 셈이죠.']
 };
 
 /* ═══════════════════════════════════════════════════════════
-   슬라이드
+   슬라이드 — 원문(Confluence GST/492011547) 구성을 따름
+   part = PARTS 인덱스 · src = 원문 절 번호
    ═══════════════════════════════════════════════════════════ */
 const a = (k,t) => `<span class="an" data-n="${k}">${t}</span>`;
 
 const SLIDES = [
 
 /* 01 ─ 표지 */
-{sec:'COVER', title:'표지', dark:true, cover:true, html:`
+{sec:'COVER', title:'표지', part:-1, dark:true, cover:true, html:`
 <div class="cov">
   <span class="eb">CUBIG · INTERNAL GUIDE · 2026.08.06</span>
   <h1>Syntitan<br>AI-ready Score<br>완벽 해설</h1>
-  <p class="sub">처리 과정과 판정 기준, 그리고 지금 우리 안에서 벌어지고 있는 논쟁에 대하여</p>
+  <p class="sub">처리 과정, 판정 기준, 지금 벌어지는 논쟁</p>
   <div class="meta">
-    <div><span class="k">Reader</span><span class="v">마케팅팀 · 전략팀</span></div>
-    <div><span class="k">Source</span><span class="v">2026-08-06 발표 및 논의</span></div>
-    <div><span class="k">Status</span><span class="v">내부 전용 · 미확정 포함</span></div>
+    <div><span class="k">읽을 대상</span><span class="v">마케팅팀 · 전략팀</span></div>
+    <div><span class="k">근거</span><span class="v">Confluence GST/492011547</span></div>
+    <div><span class="k">성격</span><span class="v">내부 전용 · 미확정 포함</span></div>
     <div><span class="k">주석</span><span class="v">점선 단어를 클릭</span></div>
   </div>
 </div>`},
 
-/* 02 ─ Overview */
-{sec:'OVERVIEW', title:'이 문서를 읽어야 하는 이유', html:`
+/* 02 ─ 서두 */
+{sec:'서두', title:'이 문서를 읽는 법', part:-1, src:'서두',
+why:'이 문서가 누구를 위한 것이고 어디까지 적었는지 밝힙니다.',
+impact:'미확정과 한계까지 적은 이유가 여기서 설명됩니다.', html:`
 <div class="hd cw">
   <span class="eb">Overview</span>
-  <h2>이 문서를 읽어야 하는 이유</h2>
-  <p class="lead">회의에서 오가는 말들이 무슨 뜻인지 알아듣기 위한 안내서입니다. 데이터 이야기가 처음이어도 끝까지 읽으실 수 있게 썼습니다.</p>
+  <h2>이 문서를 읽는 법</h2>
 </div>
 <div class="cw">
   <div class="g3" style="margin-bottom:18px">
-    <div class="card sh"><span class="k">Target Audience</span><div class="h3">마케팅팀 · 전략팀</div>
-      <p class="tx sm">데이터 분석 백그라운드가 없어도 괜찮습니다. 모르는 단어가 나오면 그 자리에서 풀어 설명하고 넘어갑니다.</p></div>
-    <div class="card sh"><span class="k">Core Purpose</span><div class="h3">회의 맥락 완벽 파악</div>
-      <p class="tx sm">우리 제품의 AI-ready 처리가 어떤 순서로 무엇을 하는지 이해하고, 지금 실무진 사이에서 어떤 논쟁이 벌어지는지 직접 판단하실 수 있게 만드는 것이 목표입니다.</p></div>
-    <div class="card sh"><span class="k">Document Type</span><div class="h3">내부 전용</div>
-      <p class="tx sm">고객에게 그대로 전달하는 자료가 아닙니다. 그래서 아직 정해지지 않은 것과 지금의 한계까지 숨기지 않고 적었고, 확인되지 않은 항목은 미확인이라고 표기했습니다.</p></div>
+    <div class="card sh"><span class="k">읽을 대상</span><div class="h3">마케팅팀 · 전략팀</div>
+      <p class="tx sm">데이터 분석 지식이 없더라도 AI가 데이터를 소화하는 방식과 우리 시스템의 동작 원리를 이해할 수 있도록 구성했습니다.</p></div>
+    <div class="card sh"><span class="k">목적</span><div class="h3">회의 맥락 파악</div>
+      <p class="tx sm">기술적 대화를 알아듣고, AI-ready 처리가 어떤 순서로 동작하는지 파악하며, 지금 벌어지는 논쟁의 본질을 판단할 수 있게 돕는 것입니다.</p></div>
+    <div class="card sh"><span class="k">성격</span><div class="h3">내부 전용</div>
+      <p class="tx sm">고객에게 바로 전달되는 자료가 아니므로 미확정 내용과 한계까지 투명하게 적었습니다. 확인되지 않은 항목은 <b>미확인</b>으로 표기했습니다.</p></div>
   </div>
-  <div class="bn v">시간이 없으시다면 <b>4장 30초 요약</b>과 <b>25장 어긋남의 지도</b> 두 장만 보셔도 회의에서 무슨 말이 오가는지는 따라가실 수 있습니다.
-    모르는 단어에는 <b>점선 밑줄</b>이 그어져 있으니, 클릭하시면 오른쪽 여백에 설명이 붙습니다.</div>
+  <div class="bn v"><b>읽는 순서.</b> 앞에서부터 순서대로 권합니다. 급하시면 <b>4장 30초 요약</b>과 <b>26장 어긋남의 지도</b>만 봐도 회의를 따라갈 수 있습니다.
+    점선 밑줄 단어를 클릭하면 오른쪽에 설명이 붙고, 오른쪽 카드에는 그 장이 <b>원문 몇 절에서 왔는지</b>가 적혀 있습니다.</div>
 </div>`},
 
-/* 03 ─ 대원칙 */
-{sec:'PRINCIPLE', title:'AI 학습의 본질', html:`
+/* 03 ─ 1장 */
+{sec:'1장 · 구조', title:'3개의 독립된 시스템', part:0, src:'1장',
+why:'AI-ready 기능이 하나가 아니라 셋으로 나뉘어 있다는 사실을 먼저 봅니다.',
+impact:'<b>앞으로 나올 문제 1번부터 10번까지가 전부 이 어긋남에서 나옵니다.</b>', html:`
 <div class="hd cw">
-  <span class="eb">Step 00 · 대원칙</span>
-  <h2>과거로 규칙을 찾고, 미래를 맞힌다</h2>
-  <p class="lead">전처리와 ${a('agent','에이전트')} 추론이 각각 어느 시점의 데이터를 다루는지 아는 것, 여기서부터 모든 논의가 출발합니다.</p>
-</div>
-<div class="cw g2">
-  <div class="card">
-    <span class="k">Phase 1 · 학습 준비 (Syntitan 전처리)</span>
-    <div class="h3">과거 데이터를 정제해<br>AI 기출문제집 만들기</div>
-    <p class="tx">AI에게 스스로 패턴을 깨우치게 하려면, 이미 결과가 나와 있는 과거의 기출문제집이 필요합니다.</p>
-    <p class="tx">우리가 엑셀을 올리고 ${a('edit','전처리')}하는 과정이 바로 이 과거 데이터에 묻은 노이즈를 지우고, AI가 공부하기 가장 좋은 상태로 만들어 주는 기초 공사입니다.</p>
-  </div>
-  <div class="card">
-    <span class="k">Phase 2 · 실전 투입 (에이전트 추론)</span>
-    <div class="h3">미래 데이터의<br>빈칸을 맞히기</div>
-    <p class="tx">훈련을 마치고 똑똑해진 AI는 실전에 투입됩니다. 이때는 정답이 없는 새로운 파일을 받죠.</p>
-    <p class="tx">그러면 AI가 과거에 공부한 패턴을 바탕으로 비어 있는 미래의 결과를 예측합니다. 지금 하는 데이터 정제는 결국 이 예측을 잘하기 위한 준비 과정입니다.</p>
-  </div>
-</div>`},
-
-/* 04 ─ 30초 요약 */
-{sec:'SUMMARY', title:'전체 프로세스 30초 요약', html:`
-<div class="hd cw">
-  <span class="eb">Summary</span>
-  <h2>전체 프로세스 30초 요약</h2>
-  <p class="lead">파일을 올리는 순간부터 점수가 나올 때까지, 딱 네 칸입니다.</p>
+  <span class="eb">1. 가장 먼저 알아야 할 사실</span>
+  <h2>3개의 독립된 시스템</h2>
+  <p class="lead">처음부터 끝까지 하나로 이어지는 단일 파이프라인이 아닙니다. 역할이 다른 <b>3개의 독립적인 모듈</b>이 나란히 배치된 구조이고, 이들이 완벽하게 맞물려 있지 않다는 점이 모든 논쟁의 출발점입니다.</p>
 </div>
 <div class="cw">
-  <div class="flow" style="margin-bottom:16px">
-    <div class="fb" style="flex:0 0 210px; background:transparent"><span class="k">Input</span>
-      <div class="h3 sm">사용자가 파일 업로드</div>
-      <p class="tx sm">엑셀 한 장, 즉 ${a('dataset','데이터셋')} 하나입니다</p></div>
-    <div class="fa">›</div>
-    <div class="fb"><span class="k">① Profiling</span>
-      <div class="h3 sm">${a('prof','진단')}</div>
-      <p class="tx sm">12단계 자동 파이프라인과 11개의 ${a('agent','LLM 에이전트')}가 돌면서 이렇게 판정합니다. "이건 고객 이탈 데이터고, churn 컬럼이 ${a('target','정답')}이고, 이 컬럼은 30% 비어 있다"</p></div>
-    <div class="fa">›</div>
-    <div class="fb"><span class="k">② EditData</span>
-      <div class="h3 sm">${a('edit','전처리 추천')}</div>
-      <p class="tx sm">5개 정제 모듈과 1개 질문 모듈이 "빈칸을 채우세요, 이상치를 자르세요"라고 권합니다. 추천일 뿐이고, 사용자가 클릭한 항목만 실제로 실행됩니다</p></div>
-    <div class="fa">›</div>
-    <div class="fb" style="border-color:var(--red-24); background:var(--red-06)"><span class="k r">③ Score</span>
-      <div class="h3 sm">${a('score','AI-ready Score')}</div>
-      <p class="tx sm">6축으로 점수를 매깁니다. 그런데 전처리 후에 다시 계산하면 <b>점수가 그대로거나 오히려 떨어집니다</b></p></div>
-  </div>
-  <div class="g2">
-    <div class="bn r">이 문서가 파고드는 지점이 바로 마지막 칸입니다. 분명히 개선했는데 점수가 안 오르거나, 심지어 떨어집니다.</div>
-    <div class="bn v">그래서 별도로 ${a('proofrun','Proof Run')}이라는 기능이 기획되었습니다. 전처리가 실제 AI 성능을 올렸는지를 점수와 별개로 직접 재는 장치입니다.</div>
-  </div>
-</div>`},
-
-/* 05 ─ 3대의 기계 */
-{sec:'ROOT CAUSE', title:'3대의 독립된 기계', html:`
-<div class="hd cw">
-  <span class="eb">The Root Cause</span>
-  <h2>먼저 알아야 할 사실, 3대의 독립된 기계</h2>
-  <p class="lead">Syntitan의 AI-ready 기능은 처음부터 끝까지 이어지는 하나의 덩어리가 아닙니다. 역할이 다른 세 대의 기계가 나란히 놓여 있고, 이들이 딱 맞물려 있지 않다는 것이 지금 벌어지는 모든 논쟁의 뿌리입니다.</p>
-</div>
-<div class="cw">
-  <table style="margin-bottom:18px">
-    <tr><th style="width:70px">기계</th><th style="width:150px">이름</th><th>하는 일</th><th style="width:220px">한 줄 비유</th></tr>
-    <tr><td class="mo">1번</td><td class="lb">${a('prof','진단 · Profiling')}</td><td>데이터를 훑어보고 이게 무슨 데이터인지, 각 ${a('col','컬럼')}이 무슨 역할인지 파악</td><td>건강검진에서 몸 상태를 측정</td></tr>
-    <tr><td class="mo">2번</td><td class="lb">${a('edit','전처리 · EditData')}</td><td>진단 결과를 보고 손봐야 한다고 추천하고, 승인하면 실제로 수정</td><td>의사가 약을 처방하고 환자가 먹음</td></tr>
-    <tr class="hi"><td class="mo">3번</td><td class="lb">${a('score','AI-ready Score')}</td><td>데이터 상태를 6축으로 평가해 점수화</td><td>건강검진 종합 점수표 발행</td></tr>
+  <table style="margin-bottom:16px">
+    <tr><th style="width:62px">시스템</th><th style="width:150px">모듈명</th><th>주요 역할</th><th style="width:222px">이해를 돕는 비유</th></tr>
+    <tr><td class="mo">1번</td><td class="lb">${a('prof','진단 · Profiling')}</td><td>어떤 성격의 데이터인지, 각 ${a('col','컬럼')}이 무슨 역할인지 파악합니다</td><td>정밀 건강검진으로 몸 상태를 측정</td></tr>
+    <tr><td class="mo">2번</td><td class="lb">${a('edit','전처리 · EditData')}</td><td>보완할 방법을 추천하고, 승인하면 실제로 수정합니다</td><td>의사가 처방하고 환자가 약을 복용</td></tr>
+    <tr class="hi"><td class="mo">3번</td><td class="lb">${a('score','AI-ready Score')}</td><td>품질과 학습 적합도를 평가해 점수를 매깁니다</td><td>종합해서 최종 검진 점수를 발행</td></tr>
   </table>
   <div class="card bad">
     <span class="k r">여기가 핵심 문제입니다</span>
-    <p class="tx" style="margin-top:2px"><b>2번이 데이터를 개선하는 기준과 3번이 평가하는 기준이 서로 다릅니다.</b> 약을 먹고 몸은 분명 좋아졌는데 검진 점수는 그대로이거나 떨어지는 상황이죠. 처방전과 검진 항목표가 애초에 다른 것을 보고 있기 때문입니다.</p>
-    <div class="g2" style="margin-top:14px">
-      <div class="step bad"><span class="sn">①</span><div style="font-size:13px;line-height:1.66">전처리가 문제를 고쳤는데 <b>점수가 그 항목을 애초에 재고 있지 않습니다.</b> 그래서 총점은 그대로입니다<br><span class="mutetx">${a('fnm','FNM')}, ${a('ivm','IVM')}이 여기 해당합니다</span></div></div>
-      <div class="step bad"><span class="sn">②</span><div style="font-size:13px;line-height:1.66">전처리가 문제를 고쳤는데 <b>고치는 과정에서 생긴 부작용만 점수가 잡아냅니다.</b> 총점은 떨어집니다<br><span class="mutetx">${a('ram','RAM')}, ${a('csm','CSM')}이 여기 해당합니다</span></div></div>
+    <p class="tx" style="margin-top:2px">2번이 데이터를 개선하는 기준과 3번이 평가하는 기준이 일치하지 않습니다. <b>약을 먹고 몸이 좋아졌는데 검진 점수는 그대로거나 떨어지는 상황</b>입니다. 검진 항목과 처방이 서로 다른 것을 보고 있기 때문입니다.</p>
+    <div class="g2" style="margin-top:13px">
+      <div class="step bad"><span class="sn">①</span><div style="font-size:13px;line-height:1.66">고쳤는데 <b>점수가 그 항목을 애초에 안 재고 있음</b> → 총점 그대로<br><span class="mutetx">${a('fnm','FNM')}, ${a('ivm','IVM')} · 23장</span></div></div>
+      <div class="step bad"><span class="sn">②</span><div style="font-size:13px;line-height:1.66">고쳤는데 <b>그 과정의 부작용을 점수가 잡아냄</b> → 총점 하락<br><span class="mutetx">${a('ram','RAM')}, ${a('csm','CSM')} · 24~25장</span></div></div>
     </div>
   </div>
 </div>`},
 
-/* 06 ─ 용어 1 */
-{sec:'TERMINOLOGY', title:'기초 용어 1 · 데이터의 형태', html:`
+/* 04 ─ 2장 */
+{sec:'2장 · 요약', title:'전체 흐름 30초 요약', part:0, src:'2장',
+why:'업로드에서 점수까지의 전체 흐름을 한 화면에 놓습니다.',
+impact:'그림 아래쪽 ⚠ 표시가 이 문서가 다루는 사고 지점입니다.', html:`
 <div class="hd cw">
-  <span class="eb">Terminology 1 / 4</span>
-  <h2>0부터 시작하는 기초 용어, 데이터의 형태</h2>
+  <span class="eb">2. 전체 흐름</span>
+  <h2>30초 요약</h2>
 </div>
-<div class="cw g22">
-  <div class="card"><span class="k">${a('dataset','데이터셋')} · Dataset</span><div class="h3">엑셀 시트 한 장</div>
-    <p class="tx sm">표 하나 전체를 말합니다. 우리 제품에 업로드하는 원본 파일 그 자체이고, 여기서부터 모든 분석이 시작됩니다.</p></div>
-  <div class="card"><span class="k">${a('nul','결측')} · Null</span><div class="h3">비어 있는 칸</div>
-    <p class="tx sm">아무것도 안 적힌 빈 셀입니다. AI는 빈칸을 스스로 계산할 수 없어 당황합니다. 그냥 두면 그 행을 통째로 버리거나 연산 에러를 내기 때문에, 버리든 채우든 결정을 해줘야 합니다.</p></div>
-  <div class="card"><span class="k">${a('row','행')} / ${a('col','컬럼')} · Row / Column</span><div class="h3">가로줄 1건 / 세로줄 1항목</div>
-    <p class="tx sm">행은 보통 고객 한 명이나 거래 한 건입니다. 컬럼은 A열은 이름, B열은 나이처럼 하나의 특성을 나타내는 항목이고요.</p></div>
-  <div class="card"><span class="k">${a('outlier','이상치')} · Outlier</span><div class="h3">혼자만 엉뚱하게 튀는 별종</div>
-    <p class="tx sm">나이 칸에 999가 적혀 있는 것처럼 정상 범위를 한참 벗어난 값입니다. AI가 "999살이면 무조건 해지하는구나"라는 엉뚱한 규칙을 만들게 하는 주범이죠.</p></div>
-</div>`},
-
-/* 07 ─ 용어 2 */
-{sec:'TERMINOLOGY', title:'기초 용어 2 · 통계 특성', html:`
-<div class="hd cw">
-  <span class="eb">Terminology 2 / 4</span>
-  <h2>0부터 시작하는 기초 용어, 통계 특성</h2>
-</div>
-<div class="cw g22">
-  <div class="card"><span class="k">${a('dist','분포')} / ${a('skew','왜도')} · Skewness</span><div class="h3">값들의 퍼짐과 쏠림</div>
-    <p class="tx sm">분포는 값들이 흩어진 모양이고, 왜도는 그중에서도 한쪽으로 치우친 정도입니다. 연봉 데이터를 떠올려 보시면 됩니다. 대부분 평범하고 소수만 엄청나게 높아서 꼬리가 길게 늘어지죠. 이럴 때 왜도가 크다고 말합니다.</p></div>
-  <div class="card"><span class="k">${a('corr','상관')} · Correlation</span><div class="h3">얼마나 똑같이 움직이는가</div>
-    <p class="tx sm">두 세로줄이 얼마나 찰떡같이 함께 움직이는지를 나타냅니다. 1에 가까울수록 키(cm) 열과 키(inch) 열처럼 사실상 100% 똑같은 중복 정보라는 뜻입니다.</p></div>
-  <div class="card" style="grid-column:1/-1"><span class="k">${a('cardi','카디널리티')} · Cardinality</span><div class="h3">메뉴, 즉 종류의 가짓수</div>
-    <p class="tx sm">하나의 세로줄 안에 겹치지 않는 서로 다른 종류가 총 몇 개나 되는지를 뜻합니다. 성별 열은 남녀 2종류뿐이라 카디널리티가 낮고, 주민번호 열은 사람 수만큼 전부 달라서 아주 높습니다.
-      너무 낮으면 알려주는 정보가 없고, 너무 높으면 패턴을 찾을 수가 없습니다. 그래서 중간이 이상적입니다.</p></div>
-</div>`},
-
-/* 08 ─ 용어 3 */
-{sec:'TERMINOLOGY', title:'기초 용어 3 · 정답과 힌트', html:`
-<div class="hd cw">
-  <span class="eb">Terminology 3 / 4</span>
-  <h2>가장 중요한 개념, 정답과 힌트</h2>
-</div>
-<div class="cw g2">
+<div class="cw g21" style="gap:22px">
+  <div class="mb" style="font-size:11.8px; line-height:1.86">[사용자가 엑셀 파일을 업로드]
+        │
+        ▼
+<span class="up">① 진단 (Profiling)</span>
+   12단계 자동 파이프라인 + 11개 <span class="mu">LLM 에이전트</span>
+   "이건 고객 이탈 예측용 데이터고, churn이 정답이고,
+    age는 나이를 뜻하고, 이 컬럼은 30% 비어 있다"
+        │
+        ├────────▶ <span class="up">③ AI-ready Score 계산 (6축)</span>
+        ▼
+<span class="up">② 전처리 추천</span> <span class="mu">(정제 5개 + 질문 1개)</span>
+   "빈칸을 채우세요, 이상한 값을 잘라내세요,
+    쓸모없는 컬럼을 지우세요, 항목을 숫자로,
+    부족한 쪽 데이터를 늘리세요"
+        │ <span class="mu">← 클릭한 항목만 실제로 실행됨</span>
+        ▼
+   데이터가 실제로 수정됨
+        │
+        └────────▶ ③ 점수를 다시 계산
+                      <span class="dn">⚠ 여기서 점수가 정체되거나 하락</span></div>
   <div class="stack">
-    <div class="card"><span class="k">${a('target','타겟')} · Target</span><div class="h3">정답 열</div>
-      <p class="tx sm">AI가 최종적으로 맞혀야 하는 정답 세로줄입니다. "이 고객이 다음 달에 해지할 것인가" O/X 열이 대표적인 예입니다.</p></div>
-    <div class="card"><span class="k">${a('feature','피처')} · Feature</span><div class="h3">힌트 열</div>
-      <p class="tx sm">정답을 추리하라고 AI에게 던져주는 재료들입니다. 타겟을 제외한 나이, 가입기간 등 나머지 모든 열이 피처가 됩니다.</p></div>
-  </div>
-  <div class="stack">
-    <div class="card bad"><span class="k r">주의 · ${a('leak','타겟 누수')}</span><div class="h3">정답지를 몰래 훔쳐보는 부정행위 힌트</div>
-      <p class="tx sm">"내일 우산 판매량"으로 "내일 비가 오는가"를 맞히는 격입니다. 시험지에 답이 같이 적혀 있는 셈이라 학습 자체가 무의미해집니다. ${a('csm','CSM')}이 이런 컬럼을 찾아내 지웁니다.</p></div>
-    <div class="card hl"><span class="k v">문서 전체를 관통하는 개념</span><div class="h3">${a('rank','기여도 순위')}</div>
-      <p class="tx sm">각 컬럼이 정답과 얼마나 관련 있는지를 계산해 1등부터 줄 세운 값입니다. 3등 안이면 high, 7등 안이면 medium, 나머지는 low죠. 전처리 쪽과 점수 쪽 <b>양쪽에 동시에 물려 있어서</b>, 뒤에서 볼 사고 대부분이 사실 여기서 출발합니다.</p></div>
-  </div>
-</div>`},
-
-/* 09 ─ 용어 4 */
-{sec:'TERMINOLOGY', title:'기초 용어 4 · 태스크와 인코딩', html:`
-<div class="hd cw">
-  <span class="eb">Terminology 4 / 4</span>
-  <h2>태스크와 데이터 타입</h2>
-</div>
-<div class="cw g2">
-  <div class="card"><span class="k">${a('task','태스크')} · Task</span><div class="h3">AI에게 시킬 시험 문제의 종류</div>
-    <ul class="li" style="margin-top:13px">
-      <li><b>이진 분류</b> · O/X 퀴즈 풀기. 이 고객이 이탈할까, 안 할까?</li>
-      <li><b>다중 분류</b> · 객관식 문제 풀기. A, B, C 등급 중 무엇일까?</li>
-      <li><b>회귀</b> · 주관식 숫자 맞히기. 내일 매출액은 얼마일까?</li>
-    </ul>
-    <p class="tx sm" style="margin-top:14px">어떤 유형이냐에 따라 AI 모델이 접근하는 방식이 완전히 달라집니다.</p></div>
-  <div class="card"><span class="k">${a('encode','인코딩')} · Encoding</span><div class="h3">${a('cate','수치형과 범주형')}의 번역</div>
-    <p class="tx sm">컬럼은 수치형과 범주형으로 나뉩니다. 수치형은 크기 비교가 되는 숫자(연봉), 범주형은 종류를 표시하는 값(지역, 남녀)이고요. 우편번호는 숫자로 적혀 있지만 크기 비교가 무의미하니 범주형입니다.</p>
-    <p class="tx sm">그런데 AI 모델은 대부분 숫자만 먹습니다. 그래서 텍스트로 된 범주형을 숫자로 번역해 줘야 하고, 이 작업을 인코딩이라고 부릅니다. ${a('cam','CAM')} 모듈이 담당합니다.</p></div>
-</div>`},
-
-/* 10 ─ 진단 파이프라인 */
-{sec:'PHASE 1', title:'1단계 진단 파이프라인', html:`
-<div class="hd cw">
-  <span class="eb">Phase 1 · Profiling</span>
-  <h2>1단계 진단, 12노드 파이프라인</h2>
-  <p class="lead">사용자가 파일을 올리면 ${a('lang','LangGraph')} 기반의 12단계 파이프라인이 돌고, 중간중간 11개의 ${a('agent','LLM 에이전트')}가 개입해 사람처럼 문맥을 읽고 판단을 내립니다.</p>
-</div>
-<div class="cw">
-  <table>
-    <tr><th style="width:50px">순서</th><th style="width:182px">${a('node','노드')}</th><th>하는 일을 사람의 말로 풀면</th><th style="width:86px">LLM 판단</th></tr>
-    <tr><td class="mo">1</td><td class="mo">scan_node</td><td>표를 펼쳐서 몇 행 몇 열인지, 빈칸은 몇 개인지, ${a('dist','분포')}는 어떤지 기계적으로 세기</td><td><span class="pill p-mix">순수 계산</span></td></tr>
-    <tr><td class="mo">2</td><td class="mo">determine_task_type</td><td>이 표로 풀 문제가 분류인지 회귀인지 ${a('task','태스크')} 판정하기</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">3</td><td class="mo">derive_target_column</td><td>"이 표에서 맞혀야 할 ${a('target','정답')}은 churn 열이다" 콕 집어 결정하기. 여기서 정답이 정해져야 ${a('rank','기여도 순위')}가 계산됩니다</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">4</td><td class="mo">derive_column_role</td><td>"이 열은 정답, 이 열은 단순 순번, 이 열은 ${a('feature','힌트')}" 딱지 붙이기. useless 판정이 ${a('csm','CSM')} 제거 대상으로 이어집니다</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">6</td><td class="mo">column_metadata_node</td><td>컬럼 하나당 41개 ${a('meta','메타데이터')} 항목을 채우기. 전처리 판정의 핵심 기준이 됩니다</td><td><span class="pill p-mix">순수 계산</span></td></tr>
-    <tr class="hi"><td class="mo">7</td><td class="mo">semantic_node</td><td>"cust_tenure_m은 고객 이용 개월 수입니다"라고 사람의 언어로 설명서 쓰기 → ${a('semc','semantic_coverage')}</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">9</td><td class="mo">ipm_node</td><td>정보가 부족하면 "이 컬럼은 무슨 뜻이에요?"라고 사용자에게 되묻기 → ${a('insuf','input_sufficiency')}</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">10</td><td class="mo">risk_metadata_node</td><td>리스크 분석과 ${a('quick','Quick Eval')} 실험 설계. 지금은 화면으로 가는 선이 끊겨 있습니다</td><td><span class="pill p-v">있음</span></td></tr>
-    <tr><td class="mo">11</td><td class="mo">${a('gov','governance_metadata')}</td><td>거버넌스 권고와 전처리 제안. 여기서 판별한 개인정보 여부가 ${a('usab','Usability')} 점수의 유일한 재료입니다</td><td><span class="pill p-v">있음</span></td></tr>
-  </table>
-</div>`},
-
-/* 11 ─ LLM 한계 */
-{sec:'PHASE 1', title:'LLM 판단의 한계', html:`
-<div class="hd cw">
-  <span class="eb">The LLM Dilemma · 문제 1</span>
-  <h2>"LLM이 판단한다"의 치명적인 한계</h2>
-  <p class="lead">사람이 엑셀 파일을 처음 열었을 때 하는 짐작, 그러니까 "아 이건 고객 유지 기간이구나" 같은 판단을 LLM에게 대신 시키는 구조입니다. 편리하지만 약점 세 가지를 함께 안고 갑니다.</p>
-</div>
-<div class="cw">
-  <div class="g3" style="margin-bottom:18px">
-    <div class="card bad"><span class="k r">약점 1</span><div class="h3 sm">${a('repro','재현성 부족')}</div>
-      <p class="tx sm">완전히 같은 데이터를 다시 물어봐도 그때그때 다른 대답이 나옵니다. 어제 90점이던 파일이 오늘은 85점이 되는 식이죠.</p></div>
-    <div class="card bad"><span class="k r">약점 2</span><div class="h3 sm">${a('anon','이름표 의존')}과 ${a('halluc','환각')}</div>
-      <p class="tx sm">컬럼명이 c1, c2로 익명화되어 있으면 안의 숫자가 똑같아도 뜻을 짐작할 수 없어 점수가 깎입니다. 반대로 이름만 그럴듯하면 없는 사실을 지어내기도 합니다.</p></div>
-    <div class="card bad"><span class="k r">약점 3</span><div class="h3 sm">맥락 한 줄에 평가가 뒤집힘</div>
-      <p class="tx sm">같은 날씨 데이터인데 "정글에서 측정했다"고 하면 정상, "한국이다"라고 하면 이상 데이터가 됩니다. 평가가 180도 바뀌죠.</p></div>
-  </div>
-  <div class="bn v">숫자는 단 하나도 바뀌지 않았는데 배경 설명 한 줄로 데이터의 운명이 갈립니다.
-    지금은 이게 버그처럼 보이지만, <b>19장에서 오히려 제품이 나아갈 방향으로 다시 검토됩니다.</b> 잠시 기억해 두시면 좋겠습니다.</div>
-</div>`},
-
-/* 12 ─ 도메인 지식 부재 */
-{sec:'PHASE 1', title:'도메인 지식의 부재', html:`
-<div class="hd cw">
-  <span class="eb">Missing Context · 문제 2</span>
-  <h2>도메인 지식을 아는 에이전트가 없다</h2>
-  <p class="lead">11개 ${a('agent','에이전트')}를 하나씩 뜯어보면 전부 통계와 형식만 보는 친구들입니다. 이 데이터가 현실 세계의 어느 업종에서 나온 것인지 판단하는 에이전트는 단 하나도 없습니다.</p>
-</div>
-<div class="cw g2">
-  <div class="card"><span class="k">지금 입력받고 있는 것</span><div class="h3">의도 · Intent</div>
-    <p class="tx sm">"이걸로 매출 예측을 할 거야" 같은 단순한 작업 목표입니다. ${a('ipm','IPM')}이 받아내는 정보가 딱 여기까지입니다.</p></div>
-  <div class="card bad"><span class="k r">부족한 것</span><div class="h3">도메인 지식 · Domain</div>
-    <p class="tx sm">"이 데이터는 강남 부동산 매출이야" 같은, 데이터가 수집된 현장의 배경지식입니다. 이걸 봐줄 사람이 지금 구조에는 없습니다.</p></div>
-</div>
-<div class="cw" style="margin-top:18px">
-  <div class="bn v">문제 1이 "LLM이라 판단이 흔들린다"였다면, 문제 2는 <b>"애초에 그걸 볼 담당자가 없다"</b>입니다.
-    회의에서 "시스템 앞단에 이 데이터가 무엇인지 더 명확하게 파악하는 단계가 있어야 한다"는 주장이 나온 이유가 이것입니다.</div>
-</div>`},
-
-/* 13 ─ 전처리 6모듈 */
-{sec:'PHASE 2', title:'전처리 6개 모듈', html:`
-<div class="hd cw">
-  <span class="eb">Phase 2 · EditData</span>
-  <h2>2단계 전처리, 6개 모듈</h2>
-  <p class="lead">진단이 끝나면 "이 데이터는 이런 손질이 필요합니다"라고 시스템이 추천합니다. 어디까지나 추천이고, 실제로 데이터가 바뀌는 것은 사용자가 화면에서 클릭한 항목뿐입니다.</p>
-</div>
-<div class="cw">
-  <table>
-    <tr><th style="width:58px">약어</th><th style="width:262px">정식 명칭</th><th>쉽게 말하면</th><th style="width:112px">점수 영향</th></tr>
-    <tr><td class="mo">FNM</td><td class="lb">${a('fnm','Feature-wise Null Management')}</td><td><b>빈칸 처리.</b> 비어 있었다는 사실 자체를 신호 컬럼으로 기록하고, ${a('nul','빈칸')}은 중간값이나 최빈값으로 채우기</td><td><span class="pill p-mix">거의 없음</span></td></tr>
-    <tr><td class="mo">IVM</td><td class="lb">${a('ivm','Invalid Value Management')}</td><td><b>값 다듬기.</b> ${a('outlier','튀는 값')}을 자르고, 쏠린 ${a('dist','분포')}를 펴고, 숫자 크기 범위를 맞추기</td><td><span class="pill p-mix">거의 없음</span></td></tr>
-    <tr><td class="mo">CSM</td><td class="lb">${a('csm','Column Selection Management')}</td><td><b>필요 없는 열 지우기.</b> 정답에 도움이 안 되거나 ${a('leak','타겟 누수')}가 있거나 다른 열과 겹치는 열 삭제</td><td><span class="pill p-no">엇갈림</span></td></tr>
-    <tr><td class="mo">CAM</td><td class="lb">${a('cam','Column Augmentation Management')}</td><td><b>항목 숫자화.</b> 종류가 방대한 문자형 범주 데이터를 AI가 읽을 수 있는 숫자로 번역</td><td><span class="pill p-yes">소폭 상승</span></td></tr>
-    <tr><td class="mo">RAM</td><td class="lb">${a('ram','Row Augmentation Management')}</td><td><b>행 증강.</b> 정답 비율이 극도로 적은 쪽의 가짜 행을 ${a('cart','CART')}로 만들어 채우기</td><td><span class="pill p-no">하락</span></td></tr>
-    <tr class="hi"><td class="mo">IPM</td><td class="lb">${a('ipm','Intent &amp; Purpose Management')}</td><td><b>사용자에게 되묻기.</b> 값이 아니라 누락된 목적과 설명을 물어 맥락을 채우기</td><td><span class="pill p-yes">확실히 상승</span></td></tr>
-  </table>
-  <div class="bn v" style="margin-top:18px">실행 순서는 <b>FNM → IVM → CSM → CAM → RAM으로 고정</b>되어 있습니다.
-    RAM이 맨 마지막이라, RAM이 만든 부작용을 뒤에서 정리해 줄 방법이 없습니다. 이 점이 23장에서 문제가 됩니다.</div>
-</div>`},
-
-/* 14 ─ 판정 3단계 */
-{sec:'PHASE 2', title:'추천 판정 3단계', html:`
-<div class="hd cw">
-  <span class="eb">Phase 2 · 판정 로직</span>
-  <h2>시스템은 어떻게 "이걸 해야 한다"고 정할까요</h2>
-  <p class="lead">모듈을 통째로 켜고 끄는 게 아니라, 컬럼 하나하나를 먼저 보고 나서 모듈 단위로 모읍니다.</p>
-</div>
-<div class="cw">
-  <div class="flow" style="margin-bottom:18px">
-    <div class="fb"><span class="k">1단계</span><div class="h3 sm">컬럼 하나하나 판정</div>
-      <p class="tx sm">컬럼 A는 ${a('fnm','FNM')}이 필요하고, 컬럼 B는 필요 없고, 컬럼 C는 ${a('ivm','IVM')}이 필요하다. 이렇게 컬럼 단위로 먼저 봅니다.</p></div>
-    <div class="fa">›</div>
-    <div class="fb"><span class="k">2단계</span><div class="h3 sm">모듈 단위로 모으기</div>
-      <p class="tx sm"><b>컬럼이 하나라도 걸리면 그 모듈 전체가 켜집니다.</b> 100개 중 딱 1개만 문제여도 추천 대상이 된다는 뜻입니다.</p></div>
-    <div class="fa">›</div>
-    <div class="fb"><span class="k">3단계</span><div class="h3 sm">화면에 표시</div>
-      <p class="tx sm">필요하면 pending으로 눌러볼 수 있게, 필요 없으면 skipped로 표시합니다. 사용자가 클릭해야 비로소 실행됩니다.</p></div>
-  </div>
-  <div class="card hl">
-    <span class="k v">숫자 기준이 명시된 모듈은 둘뿐입니다</span>
-    <p class="tx" style="margin-top:2px">발표 자료에 정확한 임계값이 적혀 있는 모듈은 <b>${a('fnm','FNM')}과 ${a('ivm','IVM')}</b> 두 개입니다.
-      ${a('csm','CSM')}, ${a('cam','CAM')}, ${a('ram','RAM')} 세 개는 여러 순위와 상관값, 리소스 한도가 섞인 복합 판단이라 단일 임계값으로 표현되지 않고, <b>구체적 수치는 미확인</b>입니다. 코드를 보거나 AI팀에 확인이 필요한 사항입니다.</p>
-  </div>
-</div>`},
-
-/* 15 ─ FNM */
-{sec:'MODULE', title:'FNM · 결측치 처리', html:`
-<div class="hd cw">
-  <span class="eb">Module Deep Dive</span>
-  <h2>${a('fnm','FNM')}, 빈칸을 채우는 일과 숨은 함정</h2>
-</div>
-<div class="cw g2">
-  <div class="stack">
-    <div class="card"><span class="k">판정 기준 · 중요한 열일수록 깐깐하게</span>
-      <ul class="li" style="margin-top:12px">
-        <li><b>30% 넘게 비었으면 무조건 처리합니다.</b> 3분의 1 이상 비었으면 어차피 못 쓰는 상태라는 판단이죠</li>
-        <li><b>중요한 열은 1%만 비어도 처리합니다.</b> ${a('rank','기여도')} high 기준 0.01</li>
-        <li><b>안 중요한 열은 10%까지 놔둡니다.</b> medium 0.05, low 0.10. 굳이 손대서 원본을 훼손하지 않겠다는 뜻입니다</li>
+    <div class="card"><span class="k">이 그림에서 기억할 것</span>
+      <ul class="li" style="margin-top:11px">
+        <li>진단은 데이터를 <b>고치지 않습니다.</b> 설명서만 씁니다</li>
+        <li>전처리는 <b>추천만</b> 합니다. 클릭해야 실행됩니다</li>
+        <li>점수는 <b>두 번</b> 계산됩니다. 진단 직후, 전처리 후</li>
+        <li>그 두 번째 계산에서 사고가 납니다</li>
       </ul></div>
-    <div class="card sh"><span class="k">Q. 중간값으로 대치하면 통계가 왜곡되지 않나요?</span>
-      <p class="tx sm">왜곡됩니다. 다만 빈칸을 그대로 두면 학습 자체가 안 되거나 연산 에러가 나기 때문에, 왜곡을 감수하고 채우는 쪽을 택한 것입니다.
-        그래서 FNM은 값을 채우는 동시에 "이 칸은 원래 비어 있었다"는 신호 컬럼을 따로 만들어 둡니다. 왜곡의 흔적을 남겨 두는 장치인 셈이죠.</p></div>
+    <div class="bn v">별도 기능으로 ${a('proofrun','Proof Run')}이 있습니다. 전처리가 실제 모델 성능을 올렸는지 점수와 별개로 검증합니다. 27장에서 다룹니다.</div>
+    <div class="bn r">그런데 그 사고를 이해하려면 먼저 <b>전처리가 대체 왜 필요한지</b>부터 알아야 합니다.</div>
   </div>
-  <div class="card bad"><span class="k r">문제 3 · 회의에서 지적된 진짜 문제</span><div class="h3">빈칸이 정보일 수도 있다</div>
-    <p class="tx">빈칸이 늘 단순한 누락은 아닙니다. 예를 들어 "해지 사유" 컬럼이 비어 있다면 그게 무슨 뜻일까요? 데이터가 누락된 게 아니라 <b>그 고객이 해지를 안 했다</b>는 명확한 사실일 수 있습니다.</p>
-    <p class="tx">이걸 다른 사람들의 평균 해지 사유로 무턱대고 채워 버리면, 없던 사실을 지어내는 셈이 되고 원래 성능을 오히려 깎아먹습니다.</p>
-    <p class="tx">지금 시스템은 이 둘을 구분하지 못합니다. 구분하려면 빈칸이 왜 비어 있는지를 알아야 하는데, 그건 데이터만 들여다봐서는 알 수 없고 <b>사람에게 물어봐야 하는 정보</b>입니다. ${a('ipm','IPM')}이 왜 중요한지가 여기서 나옵니다.</p></div>
 </div>`},
 
-/* 16 ─ IVM */
-{sec:'MODULE', title:'IVM · 분포와 이상치', html:`
+/* 05 ─ 2장 Q&A */
+{sec:'2장 · 요약', title:'전처리는 대체 왜 필요한가', part:0, src:'2장 Q&A',
+why:'전처리의 원래 역할을 확인합니다. 교과서적인 설명입니다.',
+impact:'그런데 실제로 재보니 이 설명대로 되지 않았습니다. 27장과 28장으로 이어집니다.', html:`
 <div class="hd cw">
-  <span class="eb">Module Deep Dive</span>
-  <h2>${a('ivm','IVM')}, 그리고 왜도 2.0이라는 관행</h2>
+  <span class="eb">2. 짚고 가기</span>
+  <h2>전처리가 어떻게 AI 성능을 올리나요</h2>
 </div>
 <div class="cw g2">
-  <div class="card"><span class="k">판정 기준 · 하나만 맞아도 발동</span>
-    <ul class="li" style="margin-top:12px">
-      <li><b>${a('skew','왜도')} 절댓값이 2.0을 넘으면</b> 한쪽으로 심하게 쏠린 꼬리를 ${a('logt','로그 변환')}으로 강제로 펴 버립니다</li>
-      <li><b>${a('outlier','이상치')}가 5%를 넘으면</b> 정상 울타리(${a('iqr','IQR fence')}) 밖 값을 ${a('clip','클리핑')}으로 끝값에서 잘라냅니다</li>
-      <li><b>${a('scale','스케일 정규화')}</b> · 방 개수(1에서 5)와 거리(100에서 5000)를 그대로 두면 AI가 거리를 1000배 중요하다고 착각하니 출발선을 맞춰 줍니다</li>
-    </ul>
-    <p class="tx sm" style="margin-top:14px">여기서 왜도 2.0은 통계학 법칙이 아니라 <b>업계 경험치</b>입니다. 자료 어디에도 왜 하필 2.0이어야 하는지가 증명되어 있지 않은, 언제든 조정 가능한 설정값입니다.</p></div>
-  <div class="card bad"><span class="k r">문제 4 · 가장 날카로웠던 회의 지적</span><div class="h3">왜도가 크면 나쁜 데이터인가?</div>
-    <p class="tx">연봉 데이터는 원래 왜도가 큽니다. 지진 규모도, 도시 인구도, 상품 판매량도 마찬가지고요. 데이터가 망가진 게 아니라 <b>세상이 원래 그런 모양</b>입니다.</p>
-    <p class="tx">그런데 IVM은 이를 강제로 펴서 0에 가깝게 만듭니다. 왜도가 0에 가까워졌다고 해서 더 좋은 데이터라고 말할 근거는 어디에도 없습니다.</p>
-    <p class="tx">실측이 이 지적을 뒷받침합니다. 결함 16종 실험에서 <b>IVM이 ${a('tree','트리 계열 ML 모델')} 성능을 올린 경우는 0건</b>이었습니다. 오히려 망가뜨린 쪽이었죠. 반면 LLM이 데이터를 읽는 경우에는 9건에서 좋아졌습니다. "왜도 처리는 빠지는 게 맞다"는 의견이 나온 이유입니다.</p></div>
+  <div class="qa">
+    <div class="q">전처리가 어떻게 AI 모델의 성능을 올릴 수 있나요?</div>
+    <p class="an-a">원래 역할은 <b>AI가 규칙을 잘 찾도록 장애물을 치워주는 것</b>입니다. AI는 과거 데이터에서 규칙을 찾아내는 기계이고, 전처리는 엉뚱한 규칙을 배우지 않도록 방해물을 걷어냅니다.</p>
+    <p class="an-a"><b>빈칸과 이상치 대처.</b> 빈칸 때문에 데이터를 통째로 버리지 않게 채우고, 어쩌다 섞인 튀는 값(${a('outlier','나이 999살')}) 때문에 잘못된 규칙을 만드는 것을 막습니다.</p>
+    <p class="an-a"><b>착각과 꼼수 방지.</b> 숫자 단위가 크다고 중요하다고 착각하는 것을 막고, 정답과 우연히 맞아떨어지는 불필요한 열을 지웁니다.</p>
+    <p class="an-a"><b>학습 환경 조성.</b> 소화 못 하는 텍스트를 숫자로 압축하고, 정답 비율이 너무 적을 때(해지 고객 3%) 정답만 찍는 꼼수를 막습니다.</p>
+  </div>
+  <div class="stack">
+    <div class="qa">
+      <div class="q">그런데 요즘 모델은 이미 똑똑한데, 전처리가 실질적인 개선을 못 만들고 있다면?</div>
+      <p class="an-a"><b>${a('tree','요즘 모델의 맷집')}.</b> LightGBM, XGBoost 같은 트리 계열은 빈칸이나 이상치, 크기 차이를 스스로 무시할 만큼 똑똑합니다. 치워주려던 장애물이 <b>애초에 방해거리가 아닙니다.</b></p>
+      <p class="an-a"><b>낮은 천장.</b> 기존 전처리는 있는 데이터를 재포장할 뿐 없던 정보를 만들지 못합니다. 원래 단서가 없으면 아무리 다듬어도 한계가 있습니다.</p>
+    </div>
+    <div class="bn v">여기까지가 교과서적인 설명입니다. <b>그런데 실제로 재보니 이 설명대로 되지 않았습니다.</b></div>
+  </div>
 </div>`},
 
-/* 17 ─ CSM / CAM */
-{sec:'MODULE', title:'CSM · CAM', html:`
+/* 06 ─ 3장 용어 */
+{sec:'3장 · 용어', title:'0부터 시작하는 기초 용어', part:1, src:'3장',
+why:'데이터를 다룰 때 자주 나오는 용어를 한 번에 훑습니다.',
+impact:'뒤에 나올 판정 기준이 전부 이 용어들에 붙은 숫자입니다.', html:`
 <div class="hd cw">
-  <span class="eb">Module Deep Dive</span>
-  <h2>${a('csm','CSM')} 컬럼 제거와 ${a('cam','CAM')} 숫자화</h2>
-</div>
-<div class="cw g2">
-  <div class="card"><span class="k">CSM · ${a('colin','다중공선성')}과 ${a('leak','타겟 누수')} 차단</span><div class="h3">중복 힌트와 스포일러 지우기</div>
-    <p class="tx sm">"태어난 연도(1990)"와 "나이(34)"가 둘 다 있으면 어떻게 될까요? 모델은 같은 계산을 두 번 하고, 이 정보를 2배 중요하다고 부풀려 착각합니다. 그래서 대표 하나만 남기고 지웁니다.</p>
-    <p class="tx sm">또 앞서 본 우산 판매량처럼 정답이 새어 들어간 컬럼도 찾아내 삭제하고, 단순 순번 컬럼도 제거 대상입니다.</p>
-    <p class="tx sm mutetx">판정 재료는 ${a('rank','중요도 순위')}, 기여 강도, 컬럼 신뢰도, 타겟과의 ${a('corr','상관')}, 다른 컬럼과의 상관입니다. 구체적 임계값은 미확인입니다.</p></div>
-  <div class="card"><span class="k">CAM · ${a('encode','인코딩')}과 증강</span><div class="h3">텍스트를 확률과 인기로 번역</div>
-    <p class="tx sm">AI가 못 읽는 상품코드 3,000종을 어떻게 할까요? ${a('cardi','카디널리티')}가 지나치게 높은 범주형을 단일 숫자로 바꿔 줍니다.</p>
-    <ul class="li" style="margin-top:12px">
-      <li><b>${a('bte','BTE')} 방식</b> · 그 상품을 산 사람의 이탈률을 계산해 0.85라는 위험도 숫자로</li>
-      <li><b>${a('freq','Frequency')} 방식</b> · 그 상품이 몇 번 팔렸는지 5000이라는 인기도 숫자로</li>
-    </ul>
-    <p class="tx sm" style="margin-top:12px">텍스트를 기계가 읽는 맥락으로 옮겨 주는 작업입니다. 실측에서 <b>ML 11건, LLM 8건 개선으로 유일하게 양쪽 다 좋았던 모듈</b>입니다.</p></div>
-</div>`},
-
-/* 18 ─ RAM */
-{sec:'MODULE', title:'RAM · 행 증강', html:`
-<div class="hd cw">
-  <span class="eb">Module Deep Dive</span>
-  <h2>${a('ram','RAM')} 행 증강, 그리고 AI의 꼼수</h2>
-</div>
-<div class="cw g2">
-  <div class="card"><span class="k">${a('imbal','클래스 불균형')}과 AI의 꼼수</span><div class="h3">왜 가짜 행을 만들까요</div>
-    <p class="tx sm">신용카드 결제 1만 건 중 정상이 9,990건, 사기가 10건(0.1%)이라고 해봅시다.</p>
-    <p class="tx sm">AI는 사기범의 특징을 힘들게 공부하지 않습니다. 그냥 <b>"전부 정상 결제입니다"라고 찍어 버리죠.</b> 그래도 정답률이 99.9%가 나오니까요.</p>
-    <p class="tx sm">이 꼼수를 막으려고 RAM은 ${a('cart','CART')} 합성 방식으로 부족한 사기 데이터와 유사한 가짜 행을 수백 건 만들어, 양팔 저울의 균형을 억지로 맞춥니다.</p>
-    <p class="tx sm"><b>실측에서 결함 16종 중 14종에서 ML 성능을 올린, 5개 모듈 중 효과가 가장 큰 모듈입니다.</b></p></div>
-  <div class="card bad"><span class="k r">문제점 · 원본의 노이즈도 뻥튀기된다</span><div class="h3">CART 복제의 대가</div>
-    <p class="tx sm">CART는 원본 데이터의 패턴을 정교하게 따라 만듭니다. 무작위가 아니라 기존 관계를 따라 만든다는 게 이 방식의 장점이죠.</p>
-    <p class="tx sm">그런데 만약 원본 10건 안에 <b>똑같은 중복 결제 내역</b>이 섞여 있었다면 어떻게 될까요? 새로 만든 수백 건도 그 중복 패턴을 그대로 복제해 뻥튀기하게 됩니다.</p>
-    <p class="tx sm">그 결과 ${a('dup','duplicate_ratio')}가 떨어지고 ${a('integ','Integrity')} 점수가 깎입니다. 완벽한 만능키가 아니라 분명한 약점이 있는 기술입니다. 제품이 제 할 일을 했는데 점수가 나빠지는 구조죠.</p></div>
-</div>`},
-
-/* 19 ─ Context의 마법 */
-{sec:'INSIGHT', title:'전처리의 한계와 Context의 가치', dark:true, html:`
-<div class="hd cw">
-  <span class="eb">The Magic of Context</span>
-  <h2>전처리의 한계, 그리고 LLM의 진짜 가치</h2>
-  <p class="lead">기존 전처리는 데이터를 다루기 쉽게 재포장할 뿐, 없던 정보를 만들어내지는 못합니다. 성능을 획기적으로 올리는 방법은 ${a('ctx','의미')}를 재해석하는 것입니다.</p>
-</div>
-<div class="cw g2">
-  <div class="card"><span class="k">기존 방식 · 압축</span><div class="h3">${a('cam','CAM')}이 하는 일</div>
-    <p class="tx">수천 개의 약물 이름 데이터를 그저 등장 횟수라는 단순한 숫자로 접어 버립니다.</p>
-    <p class="tx">표 안에 있는 정보를 재배열할 뿐이라 <b>정보량의 천장이 원본에 묶여 있습니다.</b> 원래 데이터에 단서가 없으면 아무리 예쁘게 다듬어도 거기까지입니다.</p></div>
-  <div class="card" style="border-color:rgba(140,124,255,.42); background:rgba(140,124,255,.14)"><span class="k" style="color:var(--nt-v)">LLM 방식 · 재해석</span><div class="h3">표 밖의 지식을 가져온다</div>
-    <p class="tx">LLM 에이전트에게 맥락을 주면 "아세트아미노펜은 해열진통제다"라는 <b>표 밖의 세상 지식</b>을 끌어옵니다.</p>
-    <p class="tx">기존에는 없었던 "진통제인가 아닌가"라는 완전히 새로운 축을 데이터에 추가해 주고, 모델은 이 힌트를 바탕으로 즉시 더 높은 적중률을 만들어냅니다.</p></div>
-</div>
-<div class="cw" style="margin-top:18px">
-  <div class="bn v">데이터를 직접 고치지 않아도, <b>이 데이터가 어떤 의미인지 설명해 주는 것만으로 성능이 일관되게 오릅니다.</b> 이것이 Context가 중요한 진짜 이유입니다.
-    반대로 열 이름이 c1, c2로 숨겨져 있으면 세상 지식을 연결할 수가 없어 이 방식이 통하지 않습니다. ${a('anon','11장에서 본 익명화 문제')}가 사실은 버그가 아닐 수도 있는 이유죠.</div>
-</div>`},
-
-/* 20 ─ 6축 */
-{sec:'PHASE 3', title:'AI-ready Score 6축 구조', html:`
-<div class="hd cw">
-  <span class="eb">Phase 3 · Score</span>
-  <h2>3단계 ${a('score','AI-ready Score')}, 6축의 실제 구조</h2>
-  <p class="lead">고객에게 보여주는 정본 6축이고 제품 화면도 이 이름을 씁니다. 그런데 이 여섯 개가 같은 방식으로 계산되지는 않습니다. 그 차이가 곧 "전처리하면 움직이는가"의 차이가 됩니다.</p>
+  <span class="eb">3. 기초 용어</span>
+  <h2>0부터 시작하는 기초 데이터 용어</h2>
+  <p class="lead">엑셀 화면을 떠올리면 대부분 바로 이해됩니다. 각 단어를 클릭하면 더 자세한 설명이 오른쪽에 붙습니다.</p>
 </div>
 <div class="cw">
   <table>
-    <tr><th style="width:178px">축 (Axis)</th><th style="width:72px">한글</th><th>어떻게 점수가 나오나</th><th style="width:196px">전처리하면 움직이나</th></tr>
-    <tr class="hi"><td class="lb">${a('integ','Integrity')}</td><td>정합성</td><td>데이터 내용(중복도, 타입 오류)을 계산식으로 잽니다</td><td><b style="color:var(--red)">움직입니다</b> · RAM이 떨어뜨림</td></tr>
-    <tr class="hi"><td class="lb">${a('consis','Consistency')}</td><td>일관성</td><td>데이터 내용(상관관계, 무관한 열)을 계산식으로 잽니다</td><td><b style="color:var(--red)">움직입니다</b> · CSM이 엇갈리게 함</td></tr>
-    <tr class="hi"><td class="lb">${a('ctx','Context')}</td><td>맥락</td><td>LLM 판단과 목적 적합성을 섞어서 잽니다</td><td><b style="color:var(--grn)">움직입니다</b> · IPM이 확실히 올림</td></tr>
-    <tr><td class="lb">${a('usab','Usability')}</td><td>유용성</td><td>개인정보가 하나라도 있으면 0점, 없으면 1점. 중간이 없는 스위치입니다</td><td>거의 안 움직입니다</td></tr>
-    <tr><td class="lb">${a('reprod','Reproducibility')}</td><td>재현성</td><td>데이터 내용을 아예 안 봅니다. 플랫폼이 기록을 잘 남기는지 체크리스트로 셉니다</td><td>안 움직입니다</td></tr>
-    <tr><td class="lb">${a('trace','Traceability')}</td><td>추적성</td><td>같은 방식입니다. ${a('relstate','Release State')}처럼 플랫폼이 자동 수행하는 7개 항목의 O/X</td><td>안 움직입니다</td></tr>
+    <tr><th style="width:132px">용어</th><th style="width:224px">엑셀로 치면</th><th>AI 분석에 미치는 영향</th></tr>
+    <tr><td class="lb">${a('dataset','데이터셋')}</td><td>엑셀 시트 한 장</td><td>분석의 근간이 되는 원재료</td></tr>
+    <tr><td class="lb">${a('row','행')} / ${a('col','컬럼')}</td><td>1행, 2행 / A열(이름), B열(나이)</td><td>행이 많을수록 학습할 사례가 풍부해지고, 항목이 다양할수록 다각적인 분석이 가능합니다</td></tr>
+    <tr class="hi"><td class="lb">${a('target','타겟')} / ${a('feature','피처')}</td><td>"해지할 예정일까?" 열 / 나머지 모든 열</td><td>타겟이 분석의 최종 목적지입니다. 무관한 피처는 오히려 방해가 됩니다</td></tr>
+    <tr><td class="lb">${a('task','태스크')}</td><td>둘 중 고르기 / 여럿 중 고르기 / 숫자 맞히기</td><td>유형에 따라 AI가 접근하는 방식이 완전히 달라집니다</td></tr>
+    <tr><td class="lb">${a('nul','결측')}</td><td>아무것도 안 적힌 셀</td><td>방치하면 그 행을 통째로 배제하거나 오류를 냅니다. AI도 알 수 있는 게 없으면 당황합니다</td></tr>
+    <tr><td class="lb">${a('outlier','이상치')}</td><td>나이 열에 999가 적혀 있는 경우</td><td>"999살이면 해지하는구나"라는 잘못된 규칙을 만들게 하는 주범</td></tr>
+    <tr><td class="lb">${a('dist','분포')} / ${a('skew','왜도')}</td><td>연봉은 대부분 낮고 소수만 아주 높음</td><td>한쪽으로 심하게 쏠리면 반대편에 대한 학습력이 떨어집니다</td></tr>
+    <tr><td class="lb">${a('corr','상관')}</td><td>"키(cm)"와 "키(inch)"는 상관이 1에 가까움</td><td>둘 다 주면 같은 정보를 중복 학습해 중요도를 과대평가합니다</td></tr>
+    <tr><td class="lb">${a('cardi','카디널리티')}</td><td>성별은 2종류, 주민번호는 사람 수만큼</td><td>너무 적으면 단순하고 전부 다르면 패턴을 못 찾아 중간이 이상적</td></tr>
+    <tr><td class="lb">${a('cate','범주형')} / 수치형</td><td>지역·등급 / 나이·금액</td><td>AI는 숫자만 소화하므로 범주형은 ${a('encode','인코딩')}으로 번역해야 합니다. 19장 CAM이 담당</td></tr>
   </table>
-  <div class="g2" style="margin-top:18px">
-    <div class="bn v">회의에서 <b>위쪽 3축 이야기만 나오는 이유</b>가 맨 오른쪽 열에 있습니다. 전처리와 점수가 어긋나는 사고는 위쪽 3축에서만 벌어지거든요.</div>
-    <div class="bn r"><b>문제 5, 6.</b> 아래 3축은 논쟁거리가 아니어서 빠진 게 아니라 각자 다른 이유로 문제를 안고 있습니다. 재현성과 추적성은 <b>플랫폼이 자동으로 하니 언제나 100점</b>이고, Usability는 개인정보 컬럼 1개와 30개를 같은 점수로 취급합니다.</div>
-  </div>
 </div>`},
 
-/* 21 ─ 12개 지표 */
-{sec:'PHASE 3', title:'12개 지표, 그중 8개만 점수에', html:`
+/* 07 ─ 3장 Q&A */
+{sec:'3장 · 용어', title:'제일 중요한 개념 하나만 고르면', part:1, src:'3장 Q&A',
+why:'표에는 없지만 문서 전체를 관통하는 개념을 미리 알고 갑니다.',
+impact:'<b>25장에서 벌어지는 사고가 이 순위의 성질 때문입니다.</b>', html:`
 <div class="hd cw">
-  <span class="eb">Phase 3 · 산식</span>
-  <h2>계산하는 지표는 12개, 점수에 들어가는 건 8개</h2>
-  <p class="lead">각 축은 하위 지표들의 <b>평균</b>입니다. 절대량이 아니라 평균이라는 점을 기억해 두세요. 컬럼을 지우거나 늘리면 분모가 같이 바뀌기 때문에, 24장의 함정이 여기서 생깁니다.</p>
+  <span class="eb">3. 짚고 가기</span>
+  <h2>이 중에 제일 중요한 개념 하나만 고르면요</h2>
 </div>
 <div class="cw g2">
-  <div>
-    <div class="k" style="margin-bottom:9px">점수에 반영되는 8개</div>
-    <table>
-      <tr><th style="width:166px">지표</th><th>무엇을 세나</th></tr>
-      <tr><td class="mo">${a('dup','duplicate_ratio')}</td><td>똑같은 가로줄이 적은가 · Integrity</td></tr>
-      <tr><td class="mo">${a('typec','type_consistency')}</td><td>값의 형태가 지정된 형태와 맞는가 · Integrity</td></tr>
-      <tr><td class="mo">${a('frel','feature_relevance')}</td><td>정답과 관련 깊은 열이 많은가 · Consistency</td></tr>
-      <tr><td class="mo">${a('redun','redundancy')}</td><td>열끼리 안 겹치는가 · Consistency</td></tr>
-      <tr><td class="mo">${a('cardE','cardinality_efficiency')}</td><td>값 종류 수가 적당한가 · Consistency</td></tr>
-      <tr><td class="mo">${a('semc','semantic_coverage')}</td><td>설명이 붙은 열이 많은가 · Context</td></tr>
-      <tr><td class="mo">${a('goal','goal_alignment')}</td><td>목적에 쓸모 있는 열이 많은가 · Context</td></tr>
-      <tr><td class="mo">${a('insuf','input_sufficiency')}</td><td>목적과 데이터가 서로 맞는가 · Context</td></tr>
-    </table>
-  </div>
-  <div>
-    <div class="k r" style="margin-bottom:9px">계산은 하는데 점수에 안 들어가는 4개 · ${a('trust','trust_score')}</div>
-    <table>
-      <tr><th style="width:166px">지표</th><th>어느 모듈이 개선하나</th></tr>
-      <tr><td class="mo">${a('compl','completeness')}</td><td><b>${a('fnm','FNM')}</b> · 빈칸 채우기의 결과가 반영되지 않음</td></tr>
-      <tr><td class="mo">${a('dstab','distribution_stability')}</td><td><b>${a('ivm','IVM')}</b> · 가장 문제가 되는 항목</td></tr>
-      <tr><td class="mo">${a('labrel','label_reliability')}</td><td>대응 모듈 없음. 정답이 틀리면 나머지가 무의미한데 점수에 없음</td></tr>
-      <tr><td class="mo">${a('metai','metadata_integrity')}</td><td>진단 자체. 진단이 얼마나 잘 됐는지가 점수에 없음</td></tr>
-    </table>
-    <div class="bn r" style="margin-top:15px">2026-06-30 개선 과제에 "컬럼 중요도가 현재 산식에 미반영"이 <b>1순위 이슈</b>로 적혀 있었고 완료 처리되었는데도 여전히 점수 밖입니다. 어디까지 반영된 것인지 <b>AI팀 확인이 필요</b>합니다.</div>
+  <div class="card hl"><span class="k v">표에는 없지만 문서 전체를 관통합니다</span><div class="h3">${a('rank','기여도 순위')} · importance_rank</div>
+    <ul class="li" style="margin-top:13px">
+      <li><b>정의.</b> 각 컬럼이 정답과 얼마나 관련 있는지를 계산해 1등부터 줄을 세운 것입니다. 3등 안이면 high, 7등 안이면 medium, 나머지는 low</li>
+      <li><b>왜 중요한가.</b> FNM이 빈칸을 언제 채울지, feature_relevance와 goal_alignment가 몇 점일지가 전부 이 순위로 정해집니다. <b>전처리 쪽과 점수 쪽 양쪽에 동시에 물려 있습니다</b></li>
+      <li><b>그래서 뭐가 문제인가.</b> 순위는 절대값이 아니라 <b>상대값</b>입니다. 컬럼을 지우면 남은 컬럼의 등수가 저절로 올라갑니다. 데이터가 좋아진 게 아니라 <b>경쟁자가 사라진 것뿐</b>인데 점수가 오릅니다</li>
+    </ul></div>
+  <div class="qa">
+    <div class="q">타겟 컬럼이 왜 자료 안에 미리 들어가 있어야 하나요?</div>
+    <p class="an-a">"고객이 탈퇴할지 예측해 줘"라고 시키려면 먼저 <b>과거 데이터</b>로 패턴을 학습시켜야 합니다. 나이, 가입 기간 같은 힌트도 있어야 하지만, 그 고객이 최종적으로 탈퇴했는지가 적힌 <b>정답지</b>가 반드시 같이 들어 있어야 합니다.</p>
+    <p class="an-a">정답지가 있어야 "가입 기간이 짧고 결제액이 높은 사람들의 정답은 주로 탈퇴였구나" 하고 규칙을 깨우칠 수 있기 때문입니다.</p>
+    <div class="ex" style="margin-top:13px"><span class="exk">한 줄 요약</span>
+      <p>우리가 진단을 돌리는 이 파일은 <b>정답이 적혀 있는 과거의 기출문제집</b>입니다. 훈련을 마친 AI는 정답 열이 없는 새 파일을 받아 그 빈칸을 스스로 채우게 됩니다.</p></div>
   </div>
 </div>`},
 
-/* 22 ─ 역설 1 */
-{sec:'PARADOX', title:'역설 1 · 고쳤는데 점수가 안 오른다', html:`
+/* 08 ─ 4.1 */
+{sec:'4장 · 진단', title:'LLM이 판단한다는 건 무슨 뜻인가', part:2, src:'4.1',
+why:'진단이 수학 계산이 아니라 LLM의 짐작이라는 것을 확인합니다.',
+impact:'첫 진단이 틀리면 전처리 추천도 점수도 도미노처럼 틀어집니다.', html:`
 <div class="hd cw">
-  <span class="eb">The Score Paradox 1 · 문제 7</span>
+  <span class="eb">4.1 진단의 작동 원리</span>
+  <h2>"LLM이 데이터를 보고 판단한다"의 의미</h2>
+  <p class="lead">복잡한 수학 계산을 시키는 것이 아닙니다. 데이터를 텍스트로 보여주고, <b>사람이 처음 보는 엑셀을 열었을 때 상황을 파악하는 과정과 똑같이</b> 스스로 생각하고 대답하게 만드는 방식입니다.</p>
+</div>
+<div class="cw g2">
+  <div class="card"><span class="k">무엇을 물어보나</span>
+    <ul class="li" style="margin-top:11px">
+      <li><b>이름을 보고 의미 파악.</b> cust_tenure_m이면 "고객(cust)이 가입을 유지한 기간(tenure)을 개월(m)로 적은 거구나"</li>
+      <li><b>값을 보고 성격 파악.</b> 0과 1만 반복되면 "예/아니오처럼 두 경우만 있는 데이터구나"</li>
+      <li><b>전체 목적과 정답 파악.</b> "이 데이터는 해지 예측용이고, 맞춰야 할 정답은 해지 여부 열이구나"</li>
+    </ul>
+    <p class="tx sm" style="margin-top:12px">이름과 값 예시 몇 줄, 기본 통계를 보여준 뒤 <b>"이 항목의 역할은 뭐니", "정답 항목은 어떤 거니", "의미를 한 문장으로 설명해 봐"</b>라고 묻고 그 대답을 저장하는 과정입니다.</p></div>
+  <div class="stack">
+    <div class="card ac"><span class="k v">에이전트가 파일을 직접 열어볼 수도 있습니다</span>
+      <p class="tx sm" style="margin-top:2px">보통은 수만 줄 전체를 보는 게 아니라 시스템이 요약해 준 <b>샘플 몇 줄과 기본 통계</b>만 보고 1차 판단을 내립니다.</p>
+      <p class="tx sm">하지만 요약본만으로 확신이 안 설 때가 있습니다. 이때 진단 에이전트에게는 <b>원본 파일을 직접 열어 샅샅이 뒤져볼 권한</b>이 주어집니다. 더 많은 줄을 읽고 분석 명령어를 실행해 스스로 다시 확인하는 원리입니다.</p></div>
+    <div class="bn r"><b>여기가 첫 단추입니다.</b> 첫 진단에서 상태를 잘못 판단하면 전처리 추천도 엉뚱하게 나오고 6축 점수까지 <b>도미노처럼 연달아 틀어집니다.</b></div>
+  </div>
+</div>`},
+
+/* 09 ─ 4.1 문제 1 */
+{sec:'4장 · 진단', title:'문제 1 · 똑같이 물어도 대답이 달라진다', part:2, src:'4.1 문제 1',
+why:'편리한 방식이 치르는 세 가지 대가를 봅니다.',
+impact:'28장에서 Context 비중을 키우자는 방향에 걸린 가장 큰 리스크입니다.', html:`
+<div class="hd cw">
+  <span class="eb">4.1 · 문제 1</span>
+  <h2>LLM 판단의 불안정성</h2>
+</div>
+<div class="cw">
+  <div class="g3" style="margin-bottom:16px">
+    <div class="card bad"><span class="k r">1 · ${a('repro','재현성 문제')}</span><div class="h3 sm">똑같이 물어도<br>대답이 달라진다</div>
+      <p class="tx sm">수학 공식은 언제나 1+1=2입니다. 하지만 LLM은 사람과 비슷해서 완전히 같은 데이터를 다시 물어도 미묘하게 다르게 답합니다. <b>"어제는 90점인데 오늘 같은 파일에 왜 85점?"</b>이 여기서 나옵니다.</p></div>
+    <div class="card bad"><span class="k r">2 · ${a('anon','익명화')}와 ${a('halluc','환각')}</span><div class="h3 sm">이름표에<br>너무 의존한다</div>
+      <p class="tx sm">c1, c2로 숨겨져 있으면 안의 숫자가 똑같아도 뜻을 몰라 다른 점수를 매깁니다. 반대로 이름이 그럴듯하면 없는 내용을 지어냅니다. <b>실제 숫자는 10인데 "이 수치는 100입니다"라고 답한 버그</b>가 보고돼 있습니다.</p></div>
+    <div class="card bad"><span class="k r">3 · 맥락의 중요성</span><div class="h3 sm">설명 한 줄에<br>평가가 뒤바뀐다</div>
+      <p class="tx sm">같은 날씨 데이터에 "정글에서 측정했다"고 하면 "온도가 높은 게 당연하지, 좋은 데이터네". "한국 날씨야"라고 하면 "이렇게 더울 리가 없는데, 이상한 데이터야"가 됩니다.</p></div>
+  </div>
+  <div class="card sh"><span class="k">진짜 리스크는 여기입니다</span>
+    <p class="tx sm" style="margin-top:2px">목적에 따라 해석이 달라지는 것 자체는 정상입니다. 문제는 LLM이 공식이 아니라 <b>주관적 해석</b>을 한다는 점입니다.
+      사용자는 <b>"한국 날씨 분석"</b>과 <b>"대한민국 기상 데이터 예측"</b>을 같은 목적으로 입력했다고 생각하지만, AI는 그 미묘한 단어 차이만으로 전혀 다른 맥락으로 받아들여 점수를 깎을 수 있습니다.
+      데이터는 완벽히 동일한데 <b>목적의 표현 방식에 따라 결과가 널뛰는 불안정성</b>입니다. 기업용 솔루션에서 같은 상황에 매번 다른 점수가 나오는 것은 신뢰도를 크게 떨어뜨립니다.</p></div>
+</div>`},
+
+/* 10 ─ 4.1 익명화 */
+{sec:'4장 · 진단', title:'컬럼 이름 하나가 총점까지 가는 길', part:2, src:'4.1',
+why:'익명화 한 번이 어떤 경로로 총점까지 내려가는지 따라갑니다.',
+impact:'AI 시대의 품질 기준이 무엇인가라는 질문으로 이어집니다.', html:`
+<div class="hd cw">
+  <span class="eb">4.1 · 두 경우를 비교</span>
+  <h2>컬럼 이름 하나가 총점까지 가는 길</h2>
+  <p class="lead">두 경우의 데이터 내용은 완전히 동일하고, 바뀐 것은 <b>열 이름뿐</b>입니다.</p>
+</div>
+<div class="cw g2">
+  <div class="card bad"><span class="k r">1 · 포장지를 벗겨낸 경우 (c1, c2)</span><div class="h3">LLM의 멘붕</div>
+    <div class="step bad" style="margin-top:12px"><span class="sn">①</span><div class="tx sm" style="margin-top:0">숫자가 아무리 깨끗해도 이름표가 없으니 나이인지 금액인지 <b>전혀 추론하지 못합니다</b></div></div>
+    <div class="step bad"><span class="sn">②</span><div class="tx sm" style="margin-top:0">"이 컬럼은 무슨 뜻입니다"라는 설명을 <b>적어내지 못하고 포기</b>합니다</div></div>
+    <div class="step bad"><span class="sn">③</span><div class="tx sm" style="margin-top:0">${a('semc','semantic_coverage')}가 0점 → ${a('ctx','Context')} 하락 → <b>총점까지 쭉 미끄러집니다</b></div></div></div>
+  <div class="card ok"><span class="k g">2 · 이름표를 살려둔 경우 (cust_tenure_m)</span><div class="h3">LLM의 추론</div>
+    <div class="step ok" style="margin-top:12px"><span class="sn">①</span><div class="tx sm" style="margin-top:0">"아! 고객 유지 개월 수구나"라고 <b>찰떡같이 알아듣습니다</b></div></div>
+    <div class="step ok"><span class="sn">②</span><div class="tx sm" style="margin-top:0">"고객이 서비스를 유지한 기간을 나타냅니다"라고 <b>훌륭한 설명을 답니다</b></div></div>
+    <div class="step ok"><span class="sn">③</span><div class="tx sm" style="margin-top:0">의미 파악 점수 만점 → Context 상승 → <b>총점도 크게 상승합니다</b></div></div></div>
+</div>
+<div class="cw" style="margin-top:16px">
+  <div class="bn v"><b>이게 버그일까요.</b> 과거에는 빈칸이나 오타가 없는지, 즉 수학적 무결성만 중요했습니다. 하지만 AI 시대에는 <b>"AI가 이 데이터를 읽고 이해할 수 있는가"</b>가 품질의 핵심 기준이 됩니다.
+    숫자가 완벽해도 익명화 때문에 의미를 이해할 수 없다면 AI 입장에서는 활용할 수 없는 데이터가 맞습니다. 점수가 깎이는 것은 버그가 아니라 <b>정확하게 평가한 결과</b>라는 해석이고, 28장 결론과 이어집니다.</div>
+</div>`},
+
+/* 11 ─ 4.2 파이프라인 */
+{sec:'4장 · 진단', title:'12단계, 무엇을 순서대로 판정하나', part:2, src:'4.2',
+why:'전처리를 하는 단계가 아니라 어떻게 고칠지 진단만 하는 구간입니다.',
+impact:'맨 오른쪽 열의 LLM 개입 여부가 곧 문제 1이 걸리는 자리입니다.', html:`
+<div class="hd cw">
+  <span class="eb">4.2 파이프라인 상세</span>
+  <h2>12단계, 무엇을 순서대로 판정하나</h2>
+  <p class="lead">${a('lang','LangGraph')}로 만들어졌고 중간중간 11개의 ${a('agent','LLM 에이전트')}가 문맥을 직접 읽고 해석합니다. 12단계를 거치면 데이터 상태 요약이 모두 작성되고, 그 요약으로 어떤 전처리가 필요한지 판단합니다.</p>
+</div>
+<div class="cw">
+  <table class="sm">
+    <tr><th style="width:44px">순서</th><th style="width:180px">${a('node','노드')}</th><th>쉽게 말하면</th><th style="width:128px">LLM 개입</th></tr>
+    <tr><td class="mo">1</td><td class="mo">scan_node</td><td>몇 행 몇 열이고 평균은 얼마고 빈칸은 몇 개인지 세는 준비 단계</td><td><span class="pill p-mix">없음</span></td></tr>
+    <tr><td class="mo">2</td><td class="mo">determine_task_type</td><td>둘 중 하나 고르기인가, 숫자 맞히기인가</td><td><span class="pill p-v">Task Type</span></td></tr>
+    <tr class="hi"><td class="mo">3</td><td class="mo">derive_target_column</td><td>"맞혀야 하는 답은 churn 열이다"를 고름</td><td><span class="pill p-v">Target Column</span></td></tr>
+    <tr><td class="mo">4</td><td class="mo">derive_column_role</td><td>힌트 / 정답 / 단순 순번(${a('idx','idx')}) / 필요 없음으로 분류</td><td><span class="pill p-v">Column Role</span></td></tr>
+    <tr><td class="mo">5</td><td class="mo">determine_target_type</td><td>정답의 형태가 예·아니오인가 등급인가 금액인가</td><td><span class="pill p-v">Target Type</span></td></tr>
+    <tr><td class="mo">6</td><td class="mo">column_metadata_node</td><td>컬럼마다 신원 조사서를 한 장씩. 하나당 41개 항목</td><td><span class="pill p-mix">없음</span></td></tr>
+    <tr class="hi"><td class="mo">7</td><td class="mo">semantic_node</td><td>사람이 읽을 설명을 붙임. ${a('semantic4','네 관점')}으로</td><td><span class="pill p-v">Semantic</span></td></tr>
+    <tr><td class="mo">8</td><td class="mo">dataset_metadata_node</td><td>표 전체의 ${a('dsmeta','종합 요약서')}. 48개 항목</td><td><span class="pill p-v">Dataset Name</span></td></tr>
+    <tr><td class="mo">?</td><td class="mo">ipm_router</td><td>정보가 너무 부족한가, 사용자에게 물어볼까 정하는 갈림길</td><td><span class="pill p-mix">조건 판정</span></td></tr>
+    <tr><td class="mo">9</td><td class="mo">ipm_node</td><td>"이 컬럼(c1)은 무슨 뜻이에요?"라고 SOS를 치는 단계</td><td><span class="pill p-v">Input Suff.</span></td></tr>
+    <tr><td class="mo">10</td><td class="mo">risk_metadata_node</td><td>위험을 정리하고 ${a('qeval','성능 검증 실험')}을 설계</td><td><span class="pill p-v">Quick Eval</span></td></tr>
+    <tr><td class="mo">11</td><td class="mo">${a('gov','governance_metadata')}</td><td>개인정보 판별과 구체적인 수리 가이드를 남김</td><td><span class="pill p-v">Diag 계열</span></td></tr>
+  </table>
+  <div class="bn r" style="margin-top:14px"><b>10번과 11번은 화면으로 가는 선이 끊겨 있습니다.</b> 1~9번도 결과물이 날것으로 노출되지는 않지만 그 데이터는 점수판과 추천 UI로 <b>빠짐없이 흘러갑니다.</b> 11번이 만든 추천 수정안만 <b>연결선 자체가 끊어져</b> 있습니다. 다만 여기서 판별한 개인정보 여부는 ${a('usab','Usability')} 점수의 <b>유일한 재료</b>로 쓰입니다.</div>
+</div>`},
+
+/* 12 ─ 4.2 댓글 */
+{sec:'4장 · 진단', title:'조사서와 요약서에는 무엇이 적히나', part:2, src:'4.2 댓글',
+why:'진단이 남기는 것은 결국 데이터에 대한 데이터, 메타데이터입니다.',
+impact:'6번 조사서가 <b>어떻게 수리할지를 결정하는 핵심 기준</b>이 됩니다.', html:`
+<div class="hd cw">
+  <span class="eb">4.2 · 조금 더 들어가면</span>
+  <h2>조사서와 요약서에는 무엇이 적히나</h2>
+  <p class="lead">진단이 남기는 것은 결국 ${a('meta','메타데이터')}, 데이터에 대한 데이터입니다.</p>
+</div>
+<div class="cw g22">
+  <div class="card"><span class="k">6번 · 컬럼당 41개 항목</span><div class="h3 sm">신원 조사서</div>
+    <p class="tx sm">기둥 하나당 41가지 상태를 검사해 기록합니다. 결측 비율은 몇 %인지, 종류가 몇 개인지, 최댓값과 최솟값과 평균은 얼마인지.</p>
+    <div class="ex" style="margin-top:11px"><span class="exk">어디에 쓰나</span>
+      <p><b>"빈칸 90%"</b> → "이 기둥은 쓸모가 없군. 삭제하자"</p>
+      <p><b>"빈칸 5%"</b> → "이 정도는 살릴 수 있겠다. 대푯값으로 채우자"</p></div></div>
+  <div class="card"><span class="k">8번 · 데이터셋 48개 항목</span><div class="h3 sm">${a('dsmeta','종합 요약서')}</div>
+    <p class="tx sm">원본을 매번 읽지 않고 요약을 만들어 재사용하는 이유가 셋입니다.</p>
+    <ul class="li" style="margin-top:10px">
+      <li><b>토큰 한계.</b> 수만 줄을 통째로 주면 과부하가 걸립니다</li>
+      <li><b>시간과 비용.</b> 매번 원본을 다시 읽으면 사용료가 어마어마해집니다</li>
+      <li><b>숲을 봐야 하는 판단.</b> 리스크와 거버넌스는 전체 방향을 봅니다</li>
+    </ul></div>
+  <div class="card"><span class="k">7번 · ${a('semantic4','네 관점')}</span><div class="h3 sm">Identity · Quality · Anomaly · Relevance</div>
+    <p class="tx sm">나이 컬럼을 예로 들면 한 흐름으로 이어집니다. <b>정체성</b> 가입 고객의 실제 나이다 → <b>품질</b> 빈칸이 5% 있지만 무리는 없다 → <b>특이점</b> 999살, -5살이 3건 섞여 조치가 필요하다 → <b>관련성</b> 이탈 예측에 매우 핵심적이다.</p>
+    <p class="tx sm mutetx">네 기준이 이어지면서 사람이 쓴 분석 리포트처럼 완성됩니다.</p></div>
+  <div class="card"><span class="k">10번 · ${a('quick','Quick Eval')}</span><div class="h3 sm">미니 모의고사 설계</div>
+    <p class="tx sm">본격 학습 전에 이 데이터가 쓸모 있는지 확인할 가벼운 테스트를 설계합니다.</p>
+    <ul class="li" style="margin-top:10px">
+      <li>무겁고 비싼 딥러닝 전에 <b>계산이 빠른 기본 모델</b>로 간을 봅니다</li>
+      <li>1만 줄이면 <b>8천은 학습용, 2천은 시험용</b>으로 나눕니다</li>
+      <li><b>정답률 최소 60%</b> 같은 합격선을 정해 둡니다</li>
+    </ul></div>
+</div>`},
+
+/* 13 ─ 4.3 */
+{sec:'4장 · 진단', title:'11개 에이전트, 그리고 없는 한 명', part:2, src:'4.3',
+why:'어느 에이전트의 판단이 어느 점수 축으로 흘러가는지 확인합니다.',
+impact:'통계와 형식만 보는 구조라 <b>도메인을 볼 사람이 없습니다.</b>', html:`
+<div class="hd cw">
+  <span class="eb">4.3 특화 에이전트</span>
+  <h2>11개 에이전트, 그리고 없는 한 명</h2>
+  <p class="lead">파이프라인이 순서라면 ${a('agent','에이전트')}는 그 자리에서 일하는 사람입니다. 오른쪽 열이 <b>어느 판단이 어느 점수로 흘러가는지</b>입니다.</p>
+</div>
+<div class="cw g21" style="gap:20px">
+  <table class="sm">
+    <tr><th style="width:22px">#</th><th style="width:112px">에이전트</th><th>역할</th><th style="width:118px">흘러가는 곳</th></tr>
+    <tr><td class="mo">1</td><td class="lb">Task Type</td><td>태스크 유형 분류</td><td>2번 노드</td></tr>
+    <tr class="hi"><td class="mo">2</td><td class="lb">Target Column</td><td>타겟 컬럼 선택</td><td>${a('rank','기여도 순위')}의 전제</td></tr>
+    <tr><td class="mo">3</td><td class="lb">Column Role</td><td>힌트 / 정답 / ${a('idx','순번')} / 불필요</td><td>${a('csm','CSM')} 제거 대상</td></tr>
+    <tr><td class="mo">4</td><td class="lb">Target Type</td><td>정답의 형태 판별</td><td>5번 노드</td></tr>
+    <tr class="hi"><td class="mo">5</td><td class="lb">Semantic</td><td>${a('semantic4','네 관점')} 설명 생성</td><td><b>${a('ctx','Context')}</b></td></tr>
+    <tr><td class="mo">6</td><td class="lb">Quick Eval</td><td>검증 실험 설계</td><td>10번 노드</td></tr>
+    <tr><td class="mo">7</td><td class="lb">Dataset Name</td><td>데이터셋 이름 생성</td><td>8번 노드</td></tr>
+    <tr><td class="mo">8</td><td class="lb">Integrity Diag</td><td>중복, 타입 불일치</td><td><b>${a('integ','Integrity')}</b></td></tr>
+    <tr><td class="mo">9</td><td class="lb">Conciseness Diag</td><td>중복 피처, 낮은 관련성</td><td><b>${a('consis','Consistency')}</b></td></tr>
+    <tr><td class="mo">10</td><td class="lb">Contextuality Diag</td><td>커버리지, 목표 정합성</td><td><b>Context</b></td></tr>
+    <tr class="hi"><td class="mo">11</td><td class="lb">Input Sufficiency</td><td>목적과 데이터가 맞는지</td><td><b>Context</b></td></tr>
+  </table>
+  <div class="stack">
+    <div class="card bad"><span class="k r">문제 2 · 도메인 지식의 부재</span>
+      <p class="tx sm" style="margin-top:2px">11개 모두 <b>통계와 형식만</b> 봅니다. 이 데이터가 어느 업종에서 나왔는지 파악하는 에이전트가 <b>하나도 없습니다.</b> <b>의도</b>는 "매출 예측 할 거야"이고 <b>도메인</b>은 "이건 동네 카페 매출이야"인데, 지금 받는 건 앞의 것뿐입니다.</p></div>
+    <div class="ex"><span class="exk">하루 매출 10만 원</span>
+      <p>에이전트들은 수학만 하니 "평균 10만 원, 이상 없음"으로 넘어갑니다. 그런데 <b>벤츠 대리점</b>이면 심각한 오류이고 <b>동네 붕어빵 가게</b>면 아주 정상입니다.</p></div>
+  </div>
+</div>`},
+
+/* 14 ─ 5.1 */
+{sec:'5장 · 전처리', title:'6개 모듈은 각각 어떤 문제를 푸나', part:3, src:'5.1',
+why:'모듈 여섯 개가 각각 어떤 AI 문제를 푸는지 한눈에 봅니다.',
+impact:'이 표가 16장부터의 상세 설명과 26장 지도로 이어집니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.1 모듈 6개</span>
+  <h2>6개 모듈은 각각 어떤 문제를 푸나</h2>
+  <p class="lead">진단이 끝나면 결함을 보완할 6가지(수정 5 + 질문 1)가 추천됩니다. 시스템은 <b>추천만</b> 하고 실제로 바뀌는 것은 클릭한 항목뿐입니다.</p>
+</div>
+<div class="cw">
+  <table class="sm">
+    <tr><th style="width:48px">모듈</th><th style="width:288px">어떤 AI 문제를 푸나</th><th>보완 방식과 임계값</th><th style="width:38px">장</th></tr>
+    <tr><td class="lb">${a('fnm','FNM')}</td><td>빈칸은 학습 시 데이터 누락과 <b>연산 에러</b>를 유발합니다</td><td>신호 컬럼을 만들고 중간값·최빈값으로 대치. 결측률 <b>30% 초과 무조건</b>, 중요한 열은 <b>1%</b>(중간 5, 낮음 10)</td><td class="mo">16</td></tr>
+    <tr><td class="lb">${a('ivm','IVM')}</td><td>튀는 값과 쏠린 분포는 예측 패턴을 <b>편향</b>시킵니다</td><td>잘라내기·로그 변환·${a('catmerge','범주 통합')}·정규화. <b>왜도 2.0 초과</b>이거나 범위 밖 값 <b>5% 초과</b></td><td class="mo">17</td></tr>
+    <tr><td class="lb">${a('csm','CSM')}</td><td>무관한 항목은 불필요한 규칙을 외우게(<b>노이즈</b>) 만듭니다</td><td>중요도가 낮거나 ${a('leak','타겟 누수')}가 있거나 정보가 겹치는 열을 제거. 임계값 <b>미확인</b></td><td class="mo">18</td></tr>
+    <tr><td class="lb">${a('cam','CAM')}</td><td>종류가 방대한 텍스트는 <b>그룹화하기 어렵습니다</b></td><td>${a('cardi','카디널리티')}가 높은 범주형을 단일 숫자로. ${a('bte','BTE')}는 정답 연관도, ${a('freq','Frequency')}는 등장 횟수</td><td class="mo">19</td></tr>
+    <tr><td class="lb">${a('ram','RAM')}</td><td>타겟 비율이 극단적이면 <b>다수결에 의존하는 꼼수</b>를 부립니다</td><td>${a('cart','CART')} 방식으로 부족한 클래스를 가상 생성해 균형을 맞춥니다</td><td class="mo">20</td></tr>
+    <tr class="hi"><td class="lb">${a('ipm','IPM')}</td><td>의미를 모르면 AI가 <b>적절한 가중치를 주지 못합니다</b></td><td>사용자에게 목적과 컬럼 의미를 질문해 메타데이터에 채웁니다. <b>값이 아니라 설명을 채우는 역할</b></td><td class="mo">26</td></tr>
+  </table>
+  <div class="bn v" style="margin-top:15px"><b>표를 건드리는 방식이 넷으로 갈립니다.</b> 칸을 바꾸거나(FNM·IVM), 열을 줄이거나(CSM), 열의 성질을 바꾸거나(CAM), 행을 늘립니다(RAM).
+    그리고 IPM만 <b>표를 한 칸도 안 건드립니다.</b> 그런데 점수를 확실히 올리는 건 그 IPM 하나뿐입니다.</div>
+</div>`},
+
+/* 15 ─ 5.2 */
+{sec:'5장 · 전처리', title:'어떻게 "이걸 해야 한다"고 판정하나', part:3, src:'5.2 · 7.3',
+why:'추천 여부를 정하는 규칙과 실행 순서를 봅니다.',
+impact:'RAM이 맨 마지막이라는 <b>문제 10</b>이 24장 점수 하락의 구조적 원인입니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.2 판정 로직</span>
+  <h2>어떻게 "이걸 해야 한다"고 판정하나</h2>
+</div>
+<div class="cw g2">
+  <div class="stack">
+    <div class="mb" style="font-size:11.6px; line-height:1.86">[1단계] 컬럼 하나하나 판정
+   컬럼 A는 FNM 필요? → 예
+   컬럼 C는 IVM 필요? → 예
+        ▼
+[2단계] 모듈 단위로 모음
+   <span class="dn">컬럼 중 하나라도 걸리면 → 모듈 "필요"</span>
+        ▼
+[3단계] 화면에 표시
+   FNM → "pending" <span class="mu">(누를 수 있는 상태)</span>
+   IVM → "skipped" <span class="mu">(건너뜀)</span>
+        ▼
+   <span class="up">사용자가 클릭 → 실제 실행</span></div>
+    <div class="qa">
+      <div class="q">판정 기준은 왜 중요한가요?</div>
+      <p class="an-a">단 1개라도 조건을 충족하면 모듈 전체가 추천으로 전환되기 때문입니다. 기준이 너무 낮으면 <b>사소한 결함 하나로 무의미한 모듈이 계속 pending으로</b> 뜨고, 추천의 신뢰도가 떨어집니다. 기준은 사용자가 꼭 필요한 의사결정만 내리도록 돕는 <b>필터</b>입니다.</p>
+    </div>
+  </div>
+  <div class="stack">
+    <div class="card"><span class="k">실행 순서는 고정입니다</span>
+      <div class="mb" style="margin-top:11px; font-size:11.6px; line-height:1.9; padding:14px 16px">FNM <span class="mu">빈칸을 먼저 없앤다</span>
+ ↓  <span class="mu">뒤 계산이 빈칸에서 깨지지 않도록</span>
+IVM <span class="mu">값의 범위를 정리한다</span>
+ ↓  <span class="mu">상관이 이상치에 끌려가지 않도록</span>
+CSM <span class="mu">필요 없는 열을 지운다</span>
+ ↓  <span class="mu">남은 열만 대상으로</span>
+CAM <span class="mu">남은 범주형을 숫자로 바꾼다</span>
+ ↓  <span class="mu">열 구성이 확정된 뒤에</span>
+<span class="dn">RAM</span> <span class="mu">마지막으로 행을 늘린다</span></div></div>
+    <div class="card bad"><span class="k r">문제 10 · 순서 고정</span>
+      <p class="tx sm" style="margin-top:2px">RAM이 <b>가장 마지막</b>이라 RAM이 만든 부작용(중복행 증가)을 정리할 방법이 없습니다. 중복 제거를 RAM 앞에 놓아야 하지만 <b>지금은 중복 제거 자체가 없습니다.</b> 순서를 바꾸는 것도 다른 부작용을 만들 수 있어(컬럼을 먼저 지우면 채울 대상이 사라짐) 단순한 문제는 아닙니다.</p></div>
+  </div>
+</div>`},
+
+/* 16 ─ 5.3 FNM */
+{sec:'5장 · 전처리', title:'빈칸이 있으면 무조건 채우나요', part:3, src:'5.3',
+why:'숫자 기준이 명확한 두 모듈 중 첫 번째입니다.',
+impact:'빈칸 문제를 제대로 풀려면 <b>사람에게 묻는 기능</b>이 필요하다는 결론으로 이어집니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.3 FNM</span>
+  <h2>빈칸이 있으면 무조건 채우나요</h2>
+  <p class="lead">아닙니다. <b>중요한 열일수록 깐깐하게</b> 봅니다.</p>
+</div>
+<div class="cw g2">
+  <div class="stack">
+    <div class="card"><span class="k v">판정 기준</span>
+      <ul class="li" style="margin-top:11px">
+        <li><b>30% 넘게 비었으면 무조건 처리.</b> 3분의 1 이상이면 어차피 쓸 수 없는 상태라는 판단입니다</li>
+        <li><b>중요한 열은 1%만 비어도 처리.</b> 결정적인 컬럼이니 빈칸 하나도 아깝다는 뜻입니다(${a('rank','기여도')} high 0.01)</li>
+        <li><b>안 중요한 열은 10%까지 봐줍니다.</b> 굳이 손대서 원본을 훼손하지 않겠다는 뜻입니다(medium 0.05, low 0.10)</li>
+        <li>기여도를 아직 알 수 없는 컬럼은 그냥 넘어갑니다</li>
+      </ul>
+      <p class="tx sm mutetx" style="margin-top:12px">여기서 중요도는 절대 기준이 아니라 <b>순위</b>입니다. CSM으로 열을 지우면 남은 열의 등수가 올라가기 때문에 25장에서 사고가 납니다.</p></div>
+    <div class="qa">
+      <div class="q">중간값으로 대치하면 전체 통계가 왜곡되지 않나요?</div>
+      <p class="an-a"><b>왜곡되는 것이 맞습니다.</b> 그럼에도 쓰는 이유는 대부분의 모델이 결측치가 하나만 있어도 <b>연산 에러</b>를 내기 때문입니다. 행을 통째로 지우면 유실이 너무 크니 우선 채웁니다.</p>
+      <p class="an-a">이때 생기는 왜곡은 <b>신호 컬럼(<span class="mono">{col}_is_null</span>)</b>을 함께 만들어 통제합니다. "원래 비어 있던 데이터"라는 사실을 독립적인 정보로 넘겨주면, AI가 실제 값과 채워진 값을 <b>구분해서</b> 학습합니다.</p>
+    </div>
+  </div>
+  <div class="card bad"><span class="k r">문제 3 · 빈칸을 채우는 게 항상 좋은 일은 아닙니다</span><div class="h3">빈칸이 그 자체로 정보일 수 있다</div>
+    <p class="tx">"해지 사유" 컬럼이 비어 있다면 그건 누락이 아니라 <b>그 고객이 해지를 안 했다</b>는 뜻일 수 있습니다. 중간값으로 채우면 없던 사실을 만들어내는 셈입니다.</p>
+    <p class="quo">회의 발언. <b>"결측치 처리를 함으로써 원래 성능이 낮아지는 경우도 있다"</b></p>
+    <p class="tx">지금 시스템은 이걸 구분하지 못합니다. 구분하려면 빈칸이 <b>왜</b> 비어 있는지를 알아야 하는데, 그건 데이터만 봐서는 알 수 없고 사용자에게 물어봐야 합니다.</p>
+    <p class="tx"><b>즉 빈칸 문제를 제대로 풀려면 데이터를 고치는 게 아니라 사람에게 묻는 기능이 필요합니다.</b> ${a('ipm','IPM')}과 28장 쟁점 1의 C안으로 이어집니다.</p></div>
+</div>`},
+
+/* 17 ─ 5.4 IVM */
+{sec:'5장 · 전처리', title:'왜 하필 왜도 2.0이고 이상치 5%인가요', part:3, src:'5.4',
+why:'값을 다듬는 기준과 실제 연산 네 가지를 함께 봅니다.',
+impact:'실측 ML 0건이라는 결과가 <b>범용 전처리 축소 논의의 출발점</b>입니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.4 IVM</span>
+  <h2>왜 하필 왜도 2.0이고 이상치 5%인가요</h2>
+  <p class="lead">둘 다 <b>정말 심한 것만 손대겠다는 보수적인 선</b>입니다. 두 조건 중 하나만 맞아도 실행됩니다.</p>
+</div>
+<div class="cw g2">
+  <div class="stack">
+    <div class="card"><span class="k v">기준과 네 가지 연산</span>
+      <ul class="li" style="margin-top:11px">
+        <li><b>${a('skew','왜도')} 절댓값 &gt; 2.0</b> → ${a('logt','로그 변환')}으로 긴 꼬리를 눌러 폅니다. 2.0은 통계학 법칙이 아니라 <b>업계 경험치</b>이고 증명된 값이 아닙니다</li>
+        <li><b>${a('outlier','이상치')} 비율 &gt; 5%</b> → ${a('clip','클리핑')}으로 끝값에서 자릅니다. 정상 범위는 ${a('iqr','IQR fence')}로 정하고, 5%는 정상 데이터를 계속 건드리지 않으려는 선입니다</li>
+        <li><b>${a('catmerge','범주 통합')}</b> · 등장 횟수가 너무 적은 자잘한 항목을 기타로 묶습니다</li>
+        <li><b>${a('scale','스케일 정규화')}</b> · 단위가 다른 컬럼들의 출발선을 0~1로 맞춥니다</li>
+      </ul></div>
+    <div class="ex"><span class="exk">비율을 셀 때 분모에 빈칸을 넣지 않는 이유</span>
+      <p>제품 100개 중 <b>80개는 검사 기록이 없고</b>, 검사한 20개 중 10개가 불량이라고 해봅시다.</p>
+      <p><b>빈칸을 넣으면</b> 10 ÷ 100 = 10%. 검사도 안 한 80개가 섞여 <b>불량률이 희석</b>되고 시스템은 정상이라 오판합니다.</p>
+      <p><b>빈칸을 빼면</b> 10 ÷ 20 = <b>50%</b>. 빈칸은 정상이 아니라 <b>알 수 없음</b>이니 빼야 진짜 심각성이 드러납니다.</p></div>
+  </div>
+  <div class="card bad"><span class="k r">문제 4 · 왜도가 크다고 나쁜 데이터인 건 아닙니다</span><div class="h3">세상이 원래 그런 모양이다</div>
+    <p class="tx">연봉 데이터는 원래 왜도가 큽니다. 지진 규모, 도시 인구, 상품 판매량 다 그렇습니다. 데이터가 망가진 게 아닙니다.</p>
+    <p class="quo">회의에서 가장 날카로웠던 지적. <b>"왜도를 개선해서 0에 가까워졌다고 좋은 데이터냐, 그것도 아닌 것 같다"</b></p>
+    <p class="tx">실측이 이 지적을 뒷받침합니다. 결함 16종 실험에서 <b>IVM이 ${a('tree','트리 계열 ML')} 성능을 올린 경우는 0건</b>, 반대로 LLM이 읽는 경우에는 9건에서 좋아졌습니다.</p>
+    <p class="tx"><b>대상이 ML이냐 LLM이냐에 따라 정답이 갈리는 모듈</b>입니다. "왜도 처리도 사실은 빠져야 되는 게 맞다"는 발언이 나왔으나 결정된 사항은 아닙니다.</p></div>
+</div>`},
+
+/* 18 ─ 5.5 CSM */
+{sec:'5장 · 전처리', title:'CSM은 무엇을 보고 열을 지우나', part:3, src:'5.5',
+why:'무엇을 근거로 열을 삭제 대상으로 고르는지 확인합니다.',
+impact:'열이 줄면 남은 열의 등수와 평균이 함께 움직입니다. 25장의 출발점입니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.5 CSM</span>
+  <h2>CSM은 무엇을 보고 열을 지우나</h2>
+  <p class="lead">판정 재료는 확인되었지만 <b>구체적 임계값은 미확인</b>입니다. 발표 자료에 숫자가 실려 있지 않습니다.</p>
+</div>
+<div class="cw g2">
+  <div class="card"><span class="k v">세 가지 삭제 사유</span>
+    <div class="step"><span class="sn">1</span><div class="tx sm" style="margin-top:0"><b>중요도가 낮은 열.</b> ${a('rank','중요도 순위')}, 기여 강도, 컬럼 신뢰도가 낮으면 대상입니다. useless 딱지가 붙은 열과 ${a('idx','단순 순번 컬럼')}도 포함됩니다</div></div>
+    <div class="step"><span class="sn">2</span><div class="tx sm" style="margin-top:0"><b>${a('leak','타겟 누수')}.</b> 정답과의 상관이 <b>과도하게</b> 높으면 정답이 새어 들어간 것으로 봅니다</div></div>
+    <div class="step"><span class="sn">3</span><div class="tx sm" style="margin-top:0"><b>${a('colin','다중공선성')}.</b> 다른 컬럼과 상관이 높은 것끼리 묶어 대표 하나만 남깁니다. '태어난 연도'와 '나이'가 둘 다 있으면 AI가 그 정보의 중요도를 <b>2배로 부풀려 착각</b>합니다</div></div></div>
+  <div class="stack">
+    <div class="qa">
+      <div class="q">힌트가 많을수록 좋은 거 아닌가요?</div>
+      <p class="an-a">상식적으로는 맞습니다. 하지만 타겟 누수는 좋은 힌트가 아니라 <b>미래의 정답지를 훔쳐보는 부정행위</b>에 가깝습니다.</p>
+      <p class="an-a">내일 비가 올지 예측한다고 해봅시다. 좋은 힌트는 오늘의 구름 양과 습도입니다. 그런데 <b>'내일 우산 판매량'</b>이 섞여 있으면, 과거 데이터에서 상관이 99%로 나오니 AI는 "우산 판매량만 보면 되겠네"라고 배웁니다.</p>
+      <p class="an-a"><b>그런데 오늘 시점에서 내일 우산이 몇 개 팔릴지는 알 수가 없습니다.</b> 실전에서는 아무 쓸모 없는 AI가 됩니다.</p>
+    </div>
+    <div class="bn r"><b>지우고 나면 무슨 일이 생기나.</b> 남은 열의 등수가 저절로 올라가고, 지워진 열이 대체로 상관이 낮았던 열이라 <b>남은 열끼리의 평균 상관은 오히려 올라갑니다.</b> 25장에서 계산으로 따라갑니다.</div>
+  </div>
+</div>`},
+
+/* 19 ─ 5.5 CAM */
+{sec:'5장 · 전처리', title:'상품코드 3,000종을 어떻게 할까요', part:3, src:'5.5',
+why:'문자로 된 열을 어떤 방식으로 숫자 하나로 바꾸는지 봅니다.',
+impact:'실측에서 <b>ML과 LLM 양쪽 모두 좋았던 유일한 모듈</b>입니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.5 CAM</span>
+  <h2>상품코드 3,000종을 어떻게 할까요</h2>
+  <p class="lead">단순한 고유 식별자는 앞선 CSM에서 이미 걸러집니다. CAM은 <b>종류가 많으면서도 정답을 찾는 데 중요한 힌트가 되는</b> 텍스트를 다룹니다.</p>
+</div>
+<div class="cw g2">
+  <div class="mb" style="font-size:11.8px; line-height:1.9"><span class="mu">원본</span>  상품코드 = "A123"  <span class="mu">(3,000종 중 하나)</span>
+
+<span class="up">Frequency</span>  <span class="mu">인기 점수로 바꾸기</span>
+  표 전체에서 몇 번 등장했는지를 셈
+  A123 → <span class="up">5,000</span>   Z999 → <span class="up">10</span>
+  <span class="mu">AI: "대중적인 상품을 산 사람과
+       마니아틱한 상품을 산 사람의
+       행동 패턴이 다르구나!"</span>
+
+<span class="up">BTE</span>  <span class="mu">위험 확률 점수로 바꾸기</span>
+  그 값을 가진 사람들의 정답 비율을 셈
+  A123 → <span class="up">0.85</span>    Z999 → <span class="up">0.01</span>
+  <span class="mu">AI: "0.85로 적힌 걸 보니
+       이거 산 사람은 이탈할 확률이
+       엄청 높은 위험한 부류구나!"</span></div>
+  <div class="stack">
+    <div class="qa">
+      <div class="q">왜 '변환'이 아니라 '증강'이라고 부르나요?</div>
+      <p class="an-a">기존 데이터를 억지로 묶거나 훼손하는 것이 아니라, <b>의미를 담은 새 컬럼을 만들어 원본 옆에 추가</b>하기 때문입니다.</p>
+    </div>
+    <div class="card sh"><span class="k">원래 설계에는 두 가지가 더 있었습니다</span>
+      <ul class="li" style="margin-top:10px">
+        <li><b>${a('binning','구간화 파생변수')}.</b> 나이 23, 27, 29를 20대로 묶으면 큰 틀에서 맥락을 짚어냅니다</li>
+        <li><b>${a('combo','컬럼 조합')}.</b> 키와 몸무게로 <b>BMI</b>를 만들면 질병 예측이 훨씬 정확해집니다</li>
+      </ul>
+      <p class="tx sm mutetx" style="margin-top:10px">발동 조건은 "현재 컬럼만으로는 표현력이 부족해 성능이 안 나오는 경우"이고 <b>임계값은 미확인</b>입니다.</p></div>
+    <div class="bn g">실측 <b>ML 11건, LLM 8건</b>(둘 다 오른 게 7건). 5개 정제 모듈 중 <b>양쪽 다 좋았던 것은 CAM 하나뿐</b>이라, 28장 쟁점 2에서 거의 유일하게 이견 없이 남는 후보입니다.</div>
+  </div>
+</div>`},
+
+/* 20 ─ RAM */
+{sec:'5장 · 전처리', title:'한쪽 비율이 높으면 그게 팩트 아닌가요', part:3, src:'5.1 댓글',
+why:'왜 없는 데이터를 만들어내면서까지 비율을 맞추는지 봅니다.',
+impact:'ML 성능은 가장 크게 올리는데 <b>점수는 깎이는</b> 모듈입니다.', html:`
+<div class="hd cw">
+  <span class="eb">5.1 RAM</span>
+  <h2>한쪽 비율이 높으면 그게 팩트 아닌가요</h2>
+</div>
+<div class="cw g2">
+  <div class="qa">
+    <div class="q">현실에서 한쪽 비율이 높으면 그냥 그게 팩트 아닌가요?</div>
+    <p class="an-a"><b>맞습니다.</b> 사기 결제가 0.1%라는 건 현실 통계입니다. 문제는 AI가 <b>점수를 잘 받는 꼼수</b>를 부린다는 점입니다.</p>
+    <p class="an-a"><b>AI의 꼼수.</b> 이것이 ${a('imbal','클래스 불균형')}입니다. 10,000건 중 9,990건이 정상이고 10건이 사기면, AI는 사기범의 특징을 공부하지 않고 그냥 <b>"100% 다 정상입니다"라고 찍어버립니다.</b> 그래도 정답률이 99.9%니까요.</p>
+    <p class="an-a"><b>우리의 목적.</b> 정답률 99.9%가 아니라 숨겨진 그 10건을 잡아내는 것입니다.</p>
+    <p class="an-a"><b>해결책.</b> 꼼수를 못 쓰도록 <b>학습할 때만 임시로</b> ${a('cart','CART')}로 증강해 50:50으로 맞춥니다. <b>이후 실전 예측에서는 다시 원래 현실 비율로 작동합니다.</b></p>
+  </div>
+  <div class="stack">
+    <div class="card ok"><span class="k g">실측 결과</span>
+      <p class="tx sm" style="margin-top:2px">결함 16종 중 <b>14종에서 ${a('tree','트리 계열 ML')} 성능을 올렸습니다.</b> 5개 모듈 중 ML 기준 효과가 가장 큽니다. LLM 쪽은 3건입니다.</p></div>
+    <div class="card bad"><span class="k r">그런데 대가가 있습니다</span><div class="h3 sm">원본의 노이즈도 함께 뻥튀기된다</div>
+      <p class="tx sm">CART로 원본의 규칙을 정교하게 따라 만드는 것은 훌륭합니다. 하지만 원본 자체에 <b>잘못된 편향이나 노이즈가 숨어 있다면</b> 새로 만든 데이터도 <b>그 나쁜 패턴을 그대로 복제하며 뻥튀기</b>합니다.</p>
+      <p class="tx sm">완벽한 만능키가 아니라 <b>약점이 존재하는 기술</b>입니다. 그 결과 ${a('dup','duplicate_ratio')}가 떨어지고 ${a('integ','Integrity')}가 깎입니다. 게다가 15장에서 봤듯 RAM은 <b>맨 마지막</b>이라 부작용을 정리할 단계도 없습니다. 계산은 24장입니다.</p></div>
+  </div>
+</div>`},
+
+/* 21 ─ 6.1 */
+{sec:'6장 · 점수', title:'축은 6개인데 왜 3개만 이야기하나', part:4, src:'6.1',
+why:'6개 축이 같은 방식으로 계산되지 않는다는 것을 확인합니다.',
+impact:'계산 방식의 차이가 곧 "전처리하면 움직이는가"의 차이입니다.', html:`
+<div class="hd cw">
+  <span class="eb">6.1 축의 구조</span>
+  <h2>축은 6개인데 왜 3개만 이야기하나</h2>
+  <p class="lead">이름은 나란히 붙어 있지만 이 6개는 <b>같은 방식으로 계산되지 않습니다.</b> 측정 방식에 따라 세 부류로 나뉩니다.</p>
+</div>
+<div class="cw">
+  <table class="sm" style="margin-bottom:15px">
+    <tr><th style="width:150px">축</th><th style="width:58px">한글</th><th>점수 산출 방식</th><th style="width:180px">전처리하면 움직이나</th></tr>
+    <tr class="hi"><td class="lb">${a('integ','Integrity')}</td><td>정합성</td><td><b>데이터 내용</b>을 계산식으로 재서 0에서 1 사이 점수를 냄</td><td><b style="color:var(--red)">움직입니다</b> · RAM이 떨어뜨림</td></tr>
+    <tr class="hi"><td class="lb">${a('consis','Consistency')}</td><td>일관성</td><td>같음</td><td><b style="color:var(--red)">움직입니다</b> · CSM이 엇갈리게 함</td></tr>
+    <tr class="hi"><td class="lb">${a('ctx','Context')}</td><td>맥락</td><td>같음. 단 <b>재료 일부가 LLM 판단</b></td><td><b style="color:var(--grn)">움직입니다</b> · IPM이 확실히 올림</td></tr>
+    <tr><td class="lb">${a('usab','Usability')}</td><td>유용성</td><td>개인정보 컬럼이 하나라도 있으면 <b>0</b>, 없으면 <b>1</b>. 중간이 없는 스위치</td><td>거의 안 움직입니다</td></tr>
+    <tr><td class="lb">${a('reprod','Reproducibility')}</td><td>재현성</td><td><b>데이터 내용과 무관.</b> 플랫폼 기록을 체크리스트로 세어 커버리지 계산</td><td>안 움직입니다</td></tr>
+    <tr><td class="lb">${a('trace','Traceability')}</td><td>추적성</td><td>같음</td><td>안 움직입니다</td></tr>
+  </table>
+  <div class="g2">
+    <div class="card bad"><span class="k r">문제 5 · 두 축이 항상 100점입니다</span>
+      <p class="tx sm" style="margin-top:2px">올리기만 하면 재현성과 추적성이 100%가 됩니다. 두 축은 데이터 품질이 아니라 <b>플랫폼이 이 확인들을 얼마나 수행하는가의 커버리지</b>이기 때문입니다. 추적성 7항목, 재현성 12항목의 O/X입니다.</p>
+      <p class="tx sm mutetx">누가 언제 변경했는지 기록하는가(R5.1 WHO), 확정본으로 고정할 수 있는가(R6.1 · ${a('relstate','Release State')}), 두 확정본을 비교할 수 있는가(R6.4 DIFF)</p>
+      <p class="quo">원본 정의 문서도 스스로 경고합니다. <b>"데이터셋별 품질 점수가 아니라 플랫폼이 이 확인들을 얼마나 수행하나의 커버리지로 읽을 것"</b></p></div>
+    <div class="stack">
+      <div class="card bad"><span class="k r">문제 6 · Usability에 중간이 없습니다</span>
+        <p class="tx sm" style="margin-top:2px">원래는 위험 컬럼 수에 따라 깎는 계산식이었으나 지금은 이진입니다. 게이트 역할은 하지만 <b>개인정보 컬럼 1개와 30개를 같은 점수로</b> 취급합니다. 마스킹이 안 됐는데 완료로 표시되는 버그도 보고돼 있었습니다(TITAN-1192).</p></div>
+      <div class="bn v">회의에서 나온 우려. <b>"타이탄에 올리니까 100점이니 이걸로 충족됐다고 얘기하는 데에 과연 설득력이 있을까."</b> 이 만점이 시작 점수를 밀어 올려 <b>29장 쟁점 6</b>으로 이어집니다.</div>
+    </div>
+  </div>
+</div>`},
+
+/* 22 ─ 6.2 8개 지표 */
+{sec:'6장 · 점수', title:'각 지표는 움직이면 무슨 일이 생기나', part:4, src:'6.2',
+why:'각 지표가 무엇을 세고 값이 움직이면 무엇이 따라 움직이는지 봅니다.',
+impact:'맨 오른쪽 열이 <b>24~25장 사고의 예고편</b>입니다.', html:`
+<div class="hd cw">
+  <span class="eb">6.2 3축의 계산식</span>
+  <h2>각 지표는 움직이면 무슨 일이 생기나</h2>
+  <p class="lead">각 축은 하위 지표들의 <b>평균</b>입니다. Integrity는 두 지표를 각 0.5로, 나머지 둘은 세 지표를 각 3분의 1로. <b>절대량이 아니라 평균</b>이라 컬럼을 지우거나 늘리면 분모가 같이 바뀝니다.</p>
+</div>
+<div class="cw">
+  <table class="sm">
+    <tr><th style="width:250px">지표 · 계산식</th><th style="width:74px">축</th><th>값이 움직이면 무슨 일이 생기나</th></tr>
+    <tr><td class="lb">${a('dup','duplicate_ratio')}<br><span class="mono mutetx">1 − 중복행수 ÷ 전체행수</span></td><td>Integrity</td><td>같은 행이 여러 번 있으면 AI가 그 패턴을 실제보다 중요하다고 착각합니다. <b style="color:var(--red)">RAM이 행을 늘리면 이 값이 떨어져 Integrity가 깎입니다</b></td></tr>
+    <tr><td class="lb">${a('typec','type_consistency')}<br><span class="mono mutetx">(피처수 − 타입불일치수) ÷ 피처수</span></td><td>Integrity</td><td>숫자 컬럼에 글자가 섞이면 데이터가 손상된 것입니다. 전처리로 크게 움직이지는 않습니다</td></tr>
+    <tr class="hi"><td class="lb">${a('frel','feature_relevance')}<br><span class="mono mutetx">(high+medium) ÷ 기여도 계산된 컬럼수</span></td><td>Consistency</td><td><b style="color:var(--grn)">순위 기반이라 CSM으로 컬럼을 지우면 남은 등수가 올라 이 값이 상승합니다</b></td></tr>
+    <tr class="hi"><td class="lb">${a('redun','redundancy')}<br><span class="mono mutetx">1 − 컬럼 쌍별 상관 절댓값의 평균</span></td><td>Consistency</td><td>같은 정보인 컬럼이 많으면 AI가 그쪽에 치우칩니다. <b style="color:var(--red)">평균이라 상관 낮은 컬럼이 빠지면 이 값이 하락합니다</b></td></tr>
+    <tr><td class="lb">${a('cardE','cardinality_efficiency')}<br><span class="mono mutetx">적정 범주형수 ÷ 전체 범주형수</span></td><td>Consistency</td><td>적정은 고유값 비율 0.01~0.30입니다. <b style="color:var(--grn)">CAM이 범주형을 수치형으로 바꾸면 분모가 줄어 이 값이 오를 수 있습니다</b></td></tr>
+    <tr><td class="lb">${a('semc','semantic_coverage')}<br><span class="mono mutetx">설명 있는 피처수 ÷ 전체 피처수</span></td><td>Context</td><td>여기서 설명은 <b>LLM이 생성한 설명</b>이라, 컬럼명이 c1이면 설명을 못 붙여 값이 떨어집니다</td></tr>
+    <tr><td class="lb">${a('goal','goal_alignment')}<br><span class="mono mutetx">(기여도 ≠ low) ÷ 평가된 컬럼수</span></td><td>Context</td><td>목적에 쓸모 있는 컬럼이 많을수록 좋다는 뜻입니다. 이것도 순위 기반이라 CSM과 함께 움직입니다</td></tr>
+    <tr class="hi"><td class="lb">${a('insuf','input_sufficiency')}<br><span class="mono mutetx">LLM이 0~1로 채점 · 목적 미기재면 0.0</span></td><td>Context</td><td>"이탈을 예측하고 싶다"는데 데이터에 이탈 여부가 없으면 불가능한 요청이고 그걸 잡아냅니다. <b style="color:var(--grn)">IPM으로 목적을 받으면 0.0에서 바로 올라갑니다</b></td></tr>
+  </table>
+  <div class="bn v" style="margin-top:14px"><b>헷갈리기 쉬운 두 지표.</b> redundancy는 <b>열 중복도</b>(나이와 생년월일처럼 같은 정보인가), duplicate_ratio는 <b>행 중복도</b>(고객 한 줄이 완벽히 같은 기록인가)입니다. 하나는 세로, 하나는 가로입니다.</div>
+</div>`},
+
+/* 23 ─ 6.2 문제 7 */
+{sec:'6장 · 점수', title:'열심히 고쳤는데 점수가 안 오릅니다', part:4, src:'6.2 문제 7',
+why:'우리가 계산하는 지표가 8개가 전부는 아니라는 사실을 확인합니다.',
+impact:'<b>발표자가 첫 번째 문제로 꼽은 항목</b>입니다.', html:`
+<div class="hd cw">
+  <span class="eb">6.2 · 문제 7</span>
   <h2>열심히 고쳤는데 점수가 안 오릅니다</h2>
-  <p class="lead">전처리(2단계)가 개선한 것을 점수(3단계)가 아예 재지 않는, 첫 번째 부조리입니다.</p>
+  <p class="lead">아래 4개는 <span class="mono">trust_score</span>라는 별도 묶음에 속해서, 값은 계산되어 저장되지만 <b>6축 점수에는 반영되지 않습니다.</b></p>
 </div>
-<div class="cw g2">
-  <div class="card bad"><span class="k r">${a('fnm','FNM')} · 빈칸 처리의 경우</span><div class="h3">completeness가 6축 밖에 있습니다</div>
-    <p class="tx sm">FNM은 빈칸을 채웁니다. 그리고 빈칸이 적은 정도를 재는 ${a('compl','completeness')} 지표도 우리가 이미 계산하고 있습니다.</p>
-    <p class="tx sm">그런데 이 지표가 6축 산식에는 들어가지 않습니다. 속으로 계산만 해두고 쓰지 않는 거죠. <b>따라서 FNM을 아무리 눌러도 점수는 1점도 오르지 않습니다.</b></p></div>
-  <div class="card bad"><span class="k r">${a('ivm','IVM')} · 분포와 이상치의 경우</span><div class="h3">distribution_stability도 마찬가지입니다</div>
-    <p class="tx sm">IVM은 쏠린 분포를 폅니다. 분포가 안정적인지 재는 ${a('dstab','distribution_stability')} 역시 계산은 하고 있고요.</p>
-    <p class="tx sm">그런데 이것도 점수에 반영되지 않습니다. 기껏 정규분포로 예쁘게 깎아 놔도, <b>건강검진 종합 점수표에 그 항목이 애초에 빠져 있는 셈</b>입니다.</p></div>
-</div>
-<div class="cw" style="margin-top:18px">
-  <div class="bn r">결과적으로 <b>5개 전처리 모듈 중 FNM과 IVM 두 개는 점수를 올리는 데 직접 기여하지 않습니다.</b> 사용자는 열심히 버튼을 눌러 데이터를 개선했는데, 화면의 숫자는 꿈쩍도 하지 않는 상황입니다.</div>
+<div class="cw g21" style="gap:20px">
+  <table class="sm">
+    <tr><th style="width:172px">미반영 지표</th><th>어느 모듈이 개선하며 왜 문제인가</th></tr>
+    <tr class="hi"><td class="lb">${a('compl','completeness')}</td><td><b>${a('fnm','FNM')}.</b> FNM이 하는 일이 바로 빈칸 채우기인데 그 결과가 점수에 반영되지 않습니다</td></tr>
+    <tr class="hi"><td class="lb">${a('dstab','distribution_stability')}</td><td><b>${a('ivm','IVM')}. 가장 문제가 되는 항목입니다.</b> IVM이 하는 일이 정확히 이걸 개선하는 건데 점수에 안 들어갑니다</td></tr>
+    <tr><td class="lb">${a('labrel','label_reliability')}</td><td>대응 모듈 없음. 정답이 틀렸으면 나머지가 다 좋아도 의미가 없는데 점수에 없습니다</td></tr>
+    <tr><td class="lb">${a('metai','metadata_integrity')}</td><td>진단 자체. 진단이 얼마나 잘 됐는지를 나타내는 지표인데 점수에 없습니다</td></tr>
+  </table>
+  <div class="stack">
+    <div class="card bad"><span class="k r">그래서 무슨 일이 벌어지나</span>
+      <p class="tx sm" style="margin-top:2px">IVM은 분포를 다듬고, 분포가 안정적인지 재는 지표도 우리가 이미 계산합니다. 그런데 점수에 안 들어갑니다. <b>IVM을 아무리 잘 실행해도 점수는 1점도 오르지 않습니다.</b> FNM도 마찬가지입니다.</p>
+      <p class="tx sm">결과적으로 <b>5개 모듈 중 두 개는 점수를 올리는 데 직접 기여하지 않습니다.</b> 사용자는 열심히 개선했는데 화면의 숫자는 그대로입니다.</p></div>
+    <div class="qa">
+      <div class="q">그러면 왜 이 4개를 점수에 안 넣었나요?</div>
+      <p class="an-a"><b>계보가 다른 지표</b>이기 때문입니다. <span class="mono">trust_score</span>는 "이 데이터를 에이전트에 넣어도 되는가"를 판정하는 <b>게이트</b> 용도로 설계되었습니다.</p>
+      <p class="an-a"><b>넣으려던 흔적은 있습니다.</b> 2026-06-30 개선 과제에 "컬럼 중요도가 현재 산식에 미반영"이 <b>1순위 이슈</b>로 적혀 있었습니다. 그런데 <b>그 이슈가 완료 처리되었는데도 여전히 점수 밖입니다.</b> 어디까지 반영되었는지는 <b>AI팀 확인이 필요합니다.</b></p>
+    </div>
+  </div>
 </div>`},
 
-/* 23 ─ 역설 2 */
-{sec:'PARADOX', title:'역설 2 · RAM을 쓰면 점수가 깎인다', html:`
+/* 24 ─ 7.1 */
+{sec:'7장 · 어긋남', title:'제 할 일을 했는데 벌을 받습니다', part:5, src:'7.1 문제 8',
+why:'시키는 대로 했는데 점수가 떨어지는 경우를 계산으로 확인합니다.',
+impact:'성능이 가장 좋아지는 모듈을 <b>권하기 어려운 상태</b>가 됩니다.', html:`
 <div class="hd cw">
-  <span class="eb">The Score Paradox 2 · 문제 8</span>
-  <h2>${a('ram','RAM')}을 쓰면 점수가 무조건 깎입니다</h2>
-  <p class="lead">안 오르는 것보다 더 심각한 상황이 있습니다. 시스템이 시키는 대로 했는데 점수가 떨어지는 경우입니다.</p>
+  <span class="eb">7.1 · 문제 8</span>
+  <h2>제 할 일을 했는데 벌을 받습니다</h2>
+  <p class="lead">23장이 "개선했는데 점수가 안 오른다"였다면, 여기서부터는 <b>오히려 떨어지는</b> 경우입니다. 먼저 ${a('ram','RAM')}이 정합성을 깎는 경로입니다.</p>
 </div>
 <div class="cw g2">
   <div class="mb">[전처리 전]
 전체 1000행 · 중복행 50행
-정답 분포 예 30건 / 아니오 970건 <span class="mu">(심한 불균형)</span>
+정답 "예" 30건 / "아니오" 970건 <span class="mu">(심한 불균형)</span>
 <span class="up">duplicate_ratio = 1 − 50/1000 = 0.95</span>  <span class="mu">좋은 편</span>
 
-[RAM 발동]
-예 30건을 <span class="mu">CART로</span> 300건까지 복제 증강
+[RAM 실행] "예" 30건을 300건까지 채움
+CART는 <span class="mu">원본의 패턴을 따라</span> 만드는 방식
 원본 30건에 이미 중복이 섞여 있었다면
 새로 만든 270건에도 <span class="dn">그 중복 패턴이 그대로</span>
 
 [전처리 후]
 전체 1270행 · 중복행 50 + 새로 생긴 다수
-<span class="dn">duplicate_ratio 급락</span>
+<span class="dn">duplicate_ratio 0.95 아래로 하락</span>
         ↓
 <span class="dn">integrity_score 하락 → 총점 하락</span></div>
   <div class="stack">
-    <div class="card bad"><span class="k r">제품이 제 할 일을 했는데 벌을 받습니다</span>
-      <p class="tx sm" style="margin-top:2px">RAM은 실측에서 <b>결함 16종 중 14종에서 ${a('tree','트리 계열 ML 모델')} 성능을 올려 준 효자 모듈</b>입니다. 그런데 그 대가로 중복행이 늘어났다는 이유 하나만으로 ${a('integ','Integrity')}가 깎입니다.</p></div>
+    <div class="card bad"><span class="k r">증강은 성공했는데 점수는 깎입니다</span>
+      <p class="tx sm" style="margin-top:2px">RAM은 실측에서 <b>16종 중 14종에서 ML 성능을 올린</b> 효자 모듈입니다. 그런데 그 대가로 중복행이 늘어 Integrity가 떨어집니다. <b>제품이 잘 작동해서 점수가 나빠지는 구조입니다.</b></p></div>
     <div class="card"><span class="k">더 근본적인 지적</span>
-      <p class="tx sm" style="margin-top:2px">원본 자체가 중복이 나올 수밖에 없는 데이터라면 어떻게 해야 할까요? 수능 답안지는 값이 1번부터 5번까지뿐이라 행이 겹치는 게 불가피합니다. 그런데 지금 시스템은 데이터의 성질을 무시하고 ${a('dup','중복률')}이라는 숫자 하나만 기계적으로 봅니다. 그래서 처음부터 낮게 나옵니다.</p></div>
-    <div class="bn r">이상한 점이 하나 더 있습니다. <b>중복행을 점수에는 넣고 있는데, 정작 중복을 제거하는 전처리 모듈은 없습니다.</b> 사용자에게 중복 때문에 점수가 깎였다고 보여주면서 고칠 도구는 주지 않는 셈입니다.</div>
+      <p class="tx sm" style="margin-top:2px">원본 자체가 중복이 불가피한 데이터라면 어떻게 하나. <b>수능 답안 데이터는 값이 1부터 5까지뿐이라 행이 겹치는 게 불가피합니다.</b> 데이터의 성질을 무시하고 중복률이라는 하나의 숫자만 보기 때문에 처음부터 낮게 나옵니다.</p></div>
+    <div class="bn r">이상한 점이 하나 더 있습니다. <b>중복행을 점수에는 넣고 있는데, 중복을 제거하는 전처리는 없습니다.</b> 점수가 깎인 것을 보여주면서 고칠 도구는 주지 않는 셈입니다. 중복 제거를 추가하거나 중복률을 점수에서 빼거나, 둘 중 하나입니다.</div>
   </div>
 </div>`},
 
-/* 24 ─ 역설 3 */
-{sec:'PARADOX', title:'역설 3 · 평균의 함정', html:`
+/* 25 ─ 7.2 */
+{sec:'7장 · 어긋남', title:'쓰레기를 버렸더니 남은 물이 탁해진다', part:5, src:'7.2 문제 9',
+why:'컬럼을 지우면 점수를 예측할 수 없게 되는 산수를 따라갑니다.',
+impact:'고객에게 결과를 미리 약속할 수 없다는 뜻이라 <b>안내 문구에 직결</b>됩니다.', html:`
 <div class="hd cw">
-  <span class="eb">The Score Paradox 3 · 문제 9</span>
-  <h2>쓰레기를 버렸더니 남은 물이 탁해진다?</h2>
-  <p class="lead">${a('csm','CSM')}으로 컬럼을 지웠을 때 ${a('consis','Consistency')} 점수가 깎이는, 산수의 함정입니다.</p>
+  <span class="eb">7.2 · 문제 9</span>
+  <h2>쓰레기를 버렸더니 남은 물이 탁해진다</h2>
+  <p class="lead">${a('csm','CSM')}으로 컬럼을 지웠을 때 ${a('consis','Consistency')}가 깎이는, 산수의 함정입니다.</p>
 </div>
 <div class="cw g2">
   <div class="mb">[전처리 전] 컬럼 5개
-컬럼 쌍별 상관 값: 0.9, 0.8, 0.1, 0.1, 0.1, 0.1 …
+상관 값들: 0.9, 0.8, 0.1, 0.1, 0.1, 0.1 …
 <span class="mu">무관한 컬럼이 많아서</span> 상관 평균 = 0.3
 <span class="up">redundancy = 1 − 0.3 = 0.7</span>
 
@@ -917,122 +1199,200 @@ const SLIDES = [
         ↓
 <span class="dn">conciseness_score 하락 → 총점 하락</span></div>
   <div class="stack">
-    <div class="card bad"><span class="k r">밀도, 즉 평균 계산의 딜레마</span>
-      <p class="tx sm" style="margin-top:2px">${a('redun','redundancy')}는 남은 컬럼들끼리의 <b>상관도 평균</b>을 봅니다. 무관하고 겉도는 열을 지우면 전체 중복량은 분명히 줄어드는데, 남은 핵심들끼리의 밀도는 수학적으로 치솟습니다. 시스템은 평균이 높아진 것만 보고 "내용 중복이 심해졌다"며 억울하게 감점합니다.</p>
-      <p class="tx sm"><b>컬럼을 지우는 어떤 전처리도 이 함정을 피할 수 없습니다.</b></p></div>
-    <div class="card"><span class="k">작은 데이터의 비극</span>
-      <p class="tx sm" style="margin-top:2px">100명 중 2명이 같은 주장을 하면 2%지만, 3명 중 2명이 같은 주장을 하면 66% 중복입니다. 컬럼 수가 3개나 4개뿐인 작은 데이터는 아무리 완벽하게 정제해도 이 평균 계산 방식 때문에 <b>무조건 낮은 Consistency 점수를 받을 수밖에 없습니다.</b> 실무진도 이 불공평함을 인지하고 있습니다.</p></div>
-    <div class="card sh"><span class="k">버튼 하나에 세 지표가 서로 다른 방향으로</span>
-      <ul class="li" style="margin-top:10px">
-        <li>상관 낮은 쌍이 빠짐 → 평균 상승 → <b style="color:var(--red)">${a('redun','redundancy')} 하락</b></li>
-        <li>남은 컬럼의 ${a('rank','등수')}가 저절로 올라감 → <b style="color:var(--grn)">${a('frel','feature_relevance')} 상승</b></li>
-        <li>같은 이유로 low가 아닌 비율이 늘어남 → <b style="color:var(--grn)">${a('goal','goal_alignment')} 상승</b></li>
-      </ul>
-      <p class="tx sm" style="margin-top:11px">총점이 오를지 내릴지는 데이터마다 다르고 <b>미리 예측할 수가 없습니다.</b> 고객에게 "이걸 누르시면 점수가 오릅니다"라고 안내할 수 없다는 뜻이죠.</p></div>
+    <div class="card bad"><span class="k r">평균 계산의 딜레마</span>
+      <p class="tx sm" style="margin-top:2px">쓰레기를 버렸으니 <b>총 중복량</b>은 분명히 줄었습니다. 하지만 시스템은 총량이 아니라 남은 컬럼들의 <b>밀도(평균)</b>를 봅니다. 핵심만 남았으니 평균 상관도는 자연스럽게 오르고, 시스템은 이를 "중복이 심해졌다"고 오해합니다.</p>
+      <p class="tx sm">정리하면 <b>데이터를 깨끗하게 정제한다 = 평균 상관도가 오른다 = 시스템이 점수를 깎는다.</b> 컬럼을 지우는 어떤 전처리도 이 함정을 피할 수 없습니다.</p></div>
+    <div class="ex"><span class="exk">작은 데이터의 비극</span>
+      <p>100명 중 2명이 같은 주장을 하면 2%지만, <b>3명 중 2명이 같은 주장을 하면 66% 중복</b>입니다. 컬럼이 3~4개뿐인 작은 데이터는 조금만 연관성이 있어도 평균 상관도가 폭발적으로 치솟습니다. <b>아무리 정제를 잘해도 무조건 낮은 점수를 받을 수밖에 없는 불공평한 구조</b>이고, 실무진도 이를 인정하고 있습니다.</p></div>
+    <div class="bn r"><b>버튼 하나에 세 갈래가 동시에.</b> ${a('redun','redundancy')} 하락, ${a('frel','feature_relevance')} 상승, ${a('goal','goal_alignment')} 상승. 총점이 오를지 내릴지는 데이터에 따라 다르고 <b>예측이 안 됩니다.</b></div>
   </div>
 </div>`},
 
-/* 25 ─ 어긋남의 지도 */
-{sec:'MAP', title:'어긋남의 지도', html:`
+/* 26 ─ 8장 */
+{sec:'8장 · 요약', title:'한 장으로 보는 어긋남의 지도', part:5, src:'8장',
+why:'문제 열 개를 모듈에서 총점까지 한 장에 펼쳐 봅니다.',
+impact:'<b>회의에서 이 장만 있으면 대화를 따라갈 수 있습니다.</b>', html:`
 <div class="hd cw">
-  <span class="eb">Summary Table · 한 장 요약</span>
-  <h2>어긋남의 지도</h2>
-  <p class="lead">문제를 아홉 개 봤습니다. 모듈에서 총점까지 가는 길을 한 장에 펼쳐 놓으면, 전부 같은 그림의 조각이라는 게 보입니다.</p>
+  <span class="eb">8. 한 장 요약</span>
+  <h2>한 장으로 보는 어긋남의 지도</h2>
 </div>
-<div class="cw">
-  <table style="margin-bottom:18px">
-    <tr><th style="width:118px">모듈</th><th style="width:162px">실제로 개선하는 것</th><th style="width:196px">그것을 재는 지표</th><th style="width:92px">점수에 있나</th><th>점수에 미치는 실제 영향</th></tr>
-    <tr><td class="lb">${a('fnm','FNM')} 빈칸 처리</td><td>결측이 줄어든다</td><td class="mo">${a('compl','completeness')}</td><td><span class="pill p-no">없음</span></td><td>거의 변동 없음</td></tr>
-    <tr><td class="lb">${a('ivm','IVM')} 값 다듬기</td><td>분포가 안정된다</td><td class="mo">${a('dstab','distribution_stability')}</td><td><span class="pill p-no">없음</span></td><td>거의 변동 없음</td></tr>
-    <tr><td class="lb">${a('csm','CSM')} 컬럼 제거</td><td>노이즈 컬럼 제거</td><td>직접 대응 지표 없음</td><td><span class="pill p-mix">해당 없음</span></td><td><b>엇갈림. 총합 예측 불가</b>. redundancy는 내려가고 feature_relevance와 goal_alignment는 올라감</td></tr>
-    <tr><td class="lb">${a('cam','CAM')} 숫자화</td><td>모델 가독성 상승</td><td class="mo">${a('cardE','cardinality_efficiency')}</td><td><span class="pill p-yes">있음</span></td><td>상승 가능. 범주형 분모 자체가 변함</td></tr>
-    <tr><td class="lb">${a('ram','RAM')} 행 증강</td><td>클래스 불균형 해소</td><td>불균형을 재는 지표가 점수에 없음</td><td><span class="pill p-no">없음</span></td><td><b style="color:var(--red)">무조건 하락.</b> duplicate_ratio가 떨어져 Integrity 하락</td></tr>
-    <tr class="hi"><td class="lb">${a('ipm','IPM')} 되묻기</td><td>데이터의 맥락과 설명 부여</td><td class="mo">${a('insuf','input_sufficiency')}, ${a('semc','semantic_coverage')}</td><td><span class="pill p-yes">있음</span></td><td><b style="color:var(--grn)">상승.</b> 유일하게 점수를 확실히 올리는 경로</td></tr>
-  </table>
-  <div class="bn v"><b>이 표에서 읽어야 할 결론.</b> 점수를 확실히 올리는 것은 데이터를 뜯어고치는 모듈이 아니라, 맥락을 채우는 IPM뿐입니다.
-    그런데 IPM은 데이터 값을 한 칸도 바꾸지 않습니다. 이 지점에서 회의의 성격이 바뀌었습니다. "산식을 어떻게 고칠까"에서 <b>"AI-ready란 데이터를 고치는 게 아니라 맥락을 붙이는 일 아닌가"</b>로요.</div>
+<div class="cw g21" style="gap:20px">
+  <div class="mb" style="font-size:11.2px; line-height:1.78">전처리 모듈 ─→ 개선되는 지표 ─→ 어느 축 ─→ 총점
+
+<span class="mu">FNM</span> 빈칸 처리 ─→ completeness         ─→ <span class="dn">(없음)</span> ─→ 변화 없음
+<span class="mu">IVM</span> 값 다듬기 ─→ distribution_stability ─→ <span class="dn">(없음)</span> ─→ 변화 없음
+              <span class="dn">↑ 이 두 개가 점수 밖에 있는 게 문제 7</span>
+
+<span class="mu">CSM</span> 컬럼 제거 ┬→ redundancy 하락      ─→ Consist. ─→ <span class="dn">하락</span>
+              ├→ feature_relevance ↑  ─→ Consist. ─→ <span class="up">상승</span>
+              └→ goal_alignment ↑     ─→ Context  ─→ <span class="up">상승</span>
+              <span class="dn">↑ 세 방향이 엇갈려 총합 예측 불가</span>
+
+<span class="mu">CAM</span> 숫자화   ─→ cardinality_efficiency ─→ Consist. ─→ <span class="up">상승 가능</span>
+
+<span class="mu">RAM</span> 행 증강  ─→ duplicate_ratio 하락  ─→ Integrity ─→ <span class="dn">하락</span>
+              <span class="dn">↑ 성능은 가장 좋은데 점수는 깎임</span>
+
+<span class="mu">IPM</span> 되묻기   ┬→ input_sufficiency ↑  ─→ Context  ─→ <span class="up">상승</span>
+              └→ semantic_coverage ↑  ─→ Context  ─→ <span class="up">상승</span>
+              <span class="up">↑ 유일하게 확실히 오르는 경로</span></div>
+  <div class="stack">
+    <div class="card hl"><span class="k v">이 표에서 읽어야 할 결론</span>
+      <p class="tx" style="margin-top:2px">데이터를 수학적으로 다듬는 전처리는 점수에 악영향을 주거나 아예 미반영되고, 데이터에 <b>설명을 달아주는 ${a('ipm','IPM')}만이 점수를 확실히 올립니다.</b> 그런데 IPM은 <b>데이터 값을 한 칸도 안 바꿉니다.</b></p>
+      <p class="tx">이 지점에서 회의의 성격이 바뀌었습니다. "산식을 어떻게 고칠까"에서 <b>"AI-ready라는 건 데이터를 고치는 게 아니라 맥락을 붙이는 일이 아닌가"</b>로요.</p></div>
+    <div class="card bad"><span class="k r">그런데 IPM은 화면에 연결되어 있지 않습니다</span>
+      <p class="tx sm" style="margin-top:2px">다른 전처리는 "전처리 시작"을 누르면 실행되는데 IPM은 그렇지 않습니다. 연결하려면 프론트엔드를 바꿔야 하고 규모가 큽니다.</p>
+      <p class="tx sm">바꿔도 문제가 남습니다. 사용자 눈에는 <b>데이터를 하나도 안 고쳤는데 점수가 오르는</b> 것으로 보입니다. <b>이걸 어떻게 설명할지가 기획 과제로 남아 있습니다.</b></p></div>
+  </div>
 </div>`},
 
-/* 26 ─ Proof Run */
-{sec:'PROOF RUN', title:'Proof Run', html:`
+/* 27 ─ 9장 */
+{sec:'9장 · Proof Run', title:'점수 말고 실제 성능을 재자', part:6, src:'9장',
+why:'기능은 정리되어 있는데 회의에서 존폐부터 다시 논의된 이유를 봅니다.',
+impact:'어디에 붙이느냐에 따라 <b>신뢰의 위기로 번질 수 있습니다.</b>', html:`
 <div class="hd cw">
-  <span class="eb">Proof Run</span>
-  <h2>"점수 말고 실제 성능을 재자"의 등장</h2>
-  <p class="lead">우리의 원래 전제는 "결함을 고치면 점수가 오르고 실제 AI 성능도 좋아진다"였습니다. 검증 실험에서 이 전제가 박살났습니다. 점수와 실제 성능이 따로 놀았거든요.</p>
+  <span class="eb">9. Proof Run</span>
+  <h2>점수 말고 실제 성능을 재자</h2>
+  <p class="lead">원래 전제는 <b>"결함을 고치면 → 점수가 오르고 → 실제 AI 성능도 좋아진다"</b>였습니다. 검증 실험에서 이 전제가 깨졌습니다. 필요한 것만 골라 적용한 쪽이 더 좋았고, 일부는 오히려 성능을 떨어뜨렸습니다.</p>
 </div>
 <div class="cw g2">
   <div class="stack">
-    <div class="card"><span class="k">실험이 확인해 준 것</span>
-      <ul class="li" style="margin-top:11px">
-        <li>전부 적용한 경우보다 <b>필요한 것만 골라 적용한 경우</b>의 성능이 더 높았습니다</li>
-        <li>일부 전처리는 오히려 성능을 떨어뜨렸습니다</li>
-        <li>결측과 이상값, 중복이 특정 태스크에서는 <b>버리면 안 되는 신호</b>였습니다</li>
-        <li>점수 상승과 ML 성능 상승이 서로 다른 방향으로 움직였습니다</li>
-      </ul></div>
-    <div class="bn v">${a('tree','요즘 트리 계열 모델')}은 빈칸이나 이상치를 스스로 무시할 만큼 맷집이 강합니다. <b>우리가 치워 준 장애물이 애초에 방해거리가 아니었던 겁니다.</b></div>
+    <div class="card"><span class="k">${a('proofrun','Proof Run')}은 어떤 기능인가</span>
+      <p class="tx sm" style="margin-top:2px">원본을 학습용과 검증용으로 나눠 모델을 만들고 채점한 것이 Before, 전처리한 데이터로 같은 과정을 반복한 것이 After입니다. <b>같은 모델, 같은 채점 기준, 같은 분할, 같은 랜덤 시드</b>를 씁니다. 1차는 <b>이진 분류만</b> 지원하고, ${a('proofkit','Proof Kit')}으로 데이터와 실행 코드를 묶어 내려받게 할 계획입니다.</p>
+      <p class="quo">PRD에 이렇게 적혀 있습니다. <b>"모델 성능 전처리로 AI-Ready Score는 낮아질 수 있음을 함께 안내함"</b></p></div>
+    <div class="qa">
+      <div class="q">전처리를 하면 성능이 오르는 거 맞나요, 아닌가요?</div>
+      <p class="an-a"><b>무엇을 위해 오르는지를 빼면 대답할 수 없는 질문</b>입니다. 결함 16종 실측입니다.</p>
+      <p class="an-a"><b>RAM</b> ML 14 / LLM 3 · <b>IVM</b> ML 0 / LLM 9 · <b>CAM</b> ML 11 / LLM 8 · <b>CSM</b> ML 2 / LLM 3 · <b>FNM</b> ML 1 / LLM 4</p>
+      <p class="an-a">다섯 줄을 나란히 보면 <b>ML에 좋은 전처리와 LLM에 좋은 전처리가 다르다</b>는 게 보입니다. 29장 쟁점 5가 포지셔닝 질문이 아니라 <b>기술 질문</b>이 되는 이유입니다.</p>
+    </div>
   </div>
-  <div class="stack">
-    <div class="card"><span class="k">${a('proofrun','Proof Run')}이란</span><div class="h3 sm">전후 성능을 같은 조건으로 비교</div>
-      <p class="tx sm">같은 모델, 같은 채점 기준, 같은 데이터 분할, 같은 랜덤 시드로 Before와 After를 잽니다. 1차 버전은 이진 분류만 지원하고, ${a('proofkit','Proof Kit')}으로 사용자가 자기 환경에서 직접 재현해 볼 수 있게 할 계획입니다.</p></div>
-    <div class="card bad"><span class="k r">Proof Run의 딜레마</span><div class="h3 sm">진단 탭에 붙는 순간 리스크가 됩니다</div>
-      <p class="tx sm">진단 탭에 성능 검증이 붙어 있으면 고객은 이걸 "우리 전처리가 성능을 올려 준다"는 약속으로 읽습니다. 그런데 실측에서 성능이 일관되게 오르지 않으니, 고객이 직접 돌려봤는데 안 오르면 <b>"그럼 AI-ready Score도 다 거짓말 아니냐"는 신뢰의 위기</b>로 번집니다.</p>
-      <p class="tx sm">그래서 나온 대안이 Proof Run을 진단이 아니라 <b>에이전트 실행 쪽</b>으로 옮기는 것입니다.</p></div>
-  </div>
+  <div class="card bad"><span class="k r">회의에서 제기된 세 가지</span>
+    <p class="tx sm" style="margin-top:2px"><b>A. 존재 이유가 사라졌다.</b> 만들어진 이유는 "점수와 ML 성능이 상관관계를 안 보인다"였는데, 이후 <b>"두 지표는 상관관계가 없어도 된다"</b>로 정리됐습니다. 그러면 기능도 같이 사라져야 하는 것 아니냐는 지적입니다.</p>
+    <p class="tx sm"><b>B. 진단 탭에 붙어 있으면 리스크다.</b> 고객은 "우리 전처리가 성능을 올린다"는 약속으로 읽는데, 돌려봤는데 안 오르면 신뢰의 위기로 번집니다.</p>
+    <p class="quo"><b>"이거 해서 잘 안 되면 그냥 우리 전처리 AI 레디 스코어 그냥 거짓말 아니야, 그런 식으로밖에 안 보일 것"</b></p>
+    <p class="tx sm"><b>C. 사람이 개입하면 검증이 아니다.</b> 사용자가 이진 분류를 3분류로 바꾸는 순간 성능 숫자가 완전히 달라집니다. 사람의 선택이 결과를 좌우하면 제품의 성능 증명이 아닙니다.</p>
+    <p class="tx sm">B와 C의 대안은 같습니다. Proof Run을 진단이 아니라 <b>에이전트 실행 쪽</b>으로 옮기는 것입니다. "데이터를 이만큼 정리했더니 에이전트가 알아서 더 좋은 모델을 만들어냈다"는 형태라면 가치가 있다는 의견입니다.</p></div>
 </div>`},
 
-/* 27 ─ 미결 쟁점 */
-{sec:'OPEN ISSUES', title:'미결 쟁점 6가지', html:`
+/* 28 ─ 10장 쟁점 1~3 */
+{sec:'10장 · 쟁점', title:'그렇다면 어떤 처리가 필요한가', part:7, src:'10장',
+why:'논의 전체를 관통하는 인식 전환과 가장 무게가 실린 세 쟁점입니다.',
+impact:'쟁점 3이 <b>회의에서 가장 많은 동의</b>를 받은 방향입니다.', html:`
 <div class="hd cw">
-  <span class="eb">Open Issues</span>
-  <h2>오늘 회의의 핵심 미결 쟁점</h2>
-  <p class="lead">결론이 난 것이 아니라 의견이 갈린 지점들입니다. 누가 어떤 입장이었는지는 적지 않았습니다.</p>
+  <span class="eb">10. 패러다임의 전환</span>
+  <h2>그렇다면 어떤 처리 과정이 필요한 걸까요</h2>
+  <p class="lead">기존 방식이 수천 개의 약물 이름을 등장 횟수로 접어버렸다면, LLM은 "아세트아미노펜은 해열진통제다"라는 <b>표 밖의 지식</b>을 가져와 '진통제인가 아닌가'라는 새 축을 추가합니다. 데이터를 고치지 않아도 <b>의미를 설명해 주는 것만으로 성능이 일관되게 오릅니다.</b></p>
 </div>
 <div class="cw g3" style="gap:14px">
-  <div class="card sh"><span class="k">쟁점 1 · 점수의 기준</span><div class="h3 sm">점수를 무엇으로 볼 것인가</div>
-    <p class="tx sm">A안은 데이터의 원래 상태만 평가하고 고정하는 것, B안은 전처리 전후 차이를 반영하는 것, C안은 <b>진단으로 불확실성을 해소한 것 자체를 가치로 보는 것</b>입니다. 일관성과 효능감의 대립이고, 회의에서는 C안이 가장 오래 논의되었습니다.</p></div>
-  <div class="card sh"><span class="k">쟁점 2 · 전처리의 범위</span><div class="h3 sm">${a('gener','범용 전처리')}로 좁힐 것인가</div>
-    <p class="tx sm">어디에 써도 대체로 좋아지는 것만 남기자는 발상입니다. 문제는 그렇게 걸러내면 남는 게 거의 없고, 원래 데이터가 깨끗한 고객사에서는 보여줄 개선이 사라진다는 점입니다.</p></div>
-  <div class="card hl"><span class="k v">쟁점 3 · 가장 많은 동의를 받은 방향</span><div class="h3 sm">${a('ctx','Context')} 비중을 키울 것인가</div>
-    <p class="tx sm">중요한 건 분포가 아니라 <b>이 데이터가 무엇을 목적으로 어떻게 얻어졌는지를 에이전트가 알 수 있는 상태인가</b>라는 이야기입니다. 다만 ${a('repro','재현성 리스크')}가 커지고, 이미 분리해 둔 설계를 되돌리는 일이라 부담이 큽니다.</p></div>
-  <div class="card sh"><span class="k">쟁점 4 · IPM의 위치</span><div class="h3 sm">${a('ipm','IPM')}을 어디에 둘 것인가</div>
-    <p class="tx sm">전처리의 한 종류로 볼지, 진단 뒤 별도 단계로 둘지, 아예 상시 컨텍스트 관리 기능으로 뺄지가 갈렸습니다. 점수를 확실히 올리는 유일한 경로인데 정작 화면에 연결되어 있지 않습니다.</p></div>
-  <div class="card sh"><span class="k">쟁점 5 · 타겟 오디언스</span><div class="h3 sm">우리 제품은 누구를 위한 것인가</div>
-    <p class="tx sm">ML 엔지니어를 위한 조작 도구인가, 데이터를 모르는 마케터를 위한 AI 시뮬레이터인가. 실측에서 <b>ML에 좋은 모듈과 LLM에 좋은 모듈이 다르다</b>는 게 확인되면서, 포지셔닝 질문이 <b>어느 모듈을 남길지의 기술 질문</b>으로 바뀌었습니다.</p>
-    <p class="tx sm mutetx">같은 맥락에서 차별점의 근거가 결국 ${a('dts','DTS')}가 합쳐진 데 있다는 의견도 나왔습니다.</p></div>
-  <div class="card sh"><span class="k">쟁점 6 · 점수의 눈금</span><div class="h3 sm">점수가 몇 점으로 나오는 게 맞나</div>
-    <p class="tx sm">${a('reprod','재현성')}과 ${a('trace','추적성')}이 늘 100점이라 시작 점수가 높고, 그만큼 개선 폭이 작아 보입니다. 실제 개선 폭은 보통 4~5% 수준인데, 왜 그만큼인지 설명해 줄 화면이 지금은 없습니다.</p></div>
+  <div class="card sh"><span class="k">쟁점 1 · 점수를 무엇으로 볼 것인가</span>
+    <p class="tx sm" style="margin-top:2px"><b>A. 데이터 상태 그대로.</b> 같은 데이터는 항상 같은 점수. 단순하지만 개선한 것이 안 나타납니다.</p>
+    <p class="tx sm"><b>B. 전처리 전후 차이.</b> 한 일이 반영되지만 나중에 새로 올리면 점수가 달라져 일관성이 깨집니다.</p>
+    <p class="tx sm"><b style="color:var(--v-dp)">C. 진단 자체를 가치로.</b> 전처리를 안 해도 불확실성을 해소한 것만으로 점수가 오릅니다. <b>가장 오래 논의된 방향</b>입니다.</p>
+    <div class="ex" style="margin-top:11px"><span class="exk">C안이 무슨 말인가</span>
+      <p>결측치가 많으면 상식적으로 나쁜 데이터입니다. 그런데 물어봤더니 <b>"그 빈칸은 누락이 아니라 해당 없음"</b>이라는 답이 왔습니다. 그러면 원래부터 괜찮은 데이터였던 겁니다. 데이터는 한 칸도 안 바뀌었는데 <b>불확실성이 사라졌습니다.</b> 회의에서는 슈뢰딩거의 고양이에 비유했습니다.</p></div></div>
+  <div class="card sh"><span class="k">쟁점 2 · ${a('gener','범용 전처리')}로 좁힐 것인가</span>
+    <p class="tx sm" style="margin-top:2px">해도 대부분 좋아지는 것만 남기자는 발상입니다. 출발점은 문제 3과 문제 4입니다.</p>
+    <p class="quo"><b>"그러려다 보면은 범용 전처리라는 게 거의 없어지긴 해요"</b></p>
+    <p class="tx sm"><b>변별력 문제.</b> 우리 고객사는 공공기관이 많고 대체로 깨끗한 데이터가 들어옵니다. 범용만 남기면 손댈 게 없어 개선을 보여줄 게 없어집니다.</p>
+    <p class="tx sm"><b>반론.</b> 손댈 게 없다면 애초에 AI-ready된 데이터입니다. 점수가 높은 게 맞고 그 이유를 설명할 수 있으면 충분합니다.</p></div>
+  <div class="card hl"><span class="k v">쟁점 3 · ${a('ctx','Context')} 비중 · 가장 많은 동의</span>
+    <p class="tx sm" style="margin-top:2px">컬럼 정보가 없는 것과 제대로 박혀 있는 것은 <b>에이전트가 받는 정보량이 완전히 다릅니다.</b> 중요한 건 분포가 아니라 이 데이터가 무엇을 목적으로 어떻게 얻어졌는지를 알 수 있는 상태인가입니다.</p>
+    <p class="tx sm">맞춤법이 틀린 문장도 LLM은 잘 읽습니다. 그러면 이미 AI-ready입니다. <b>그런데 우리는 맞춤법을 다 고치려 하고 있습니다.</b></p>
+    <div class="ex" style="margin-top:11px"><span class="exk">걸린 리스크 두 개</span>
+      <p><b>하나.</b> Context는 LLM 판단에 의존합니다(문제 1). 비중을 키우면 <b>재현성 보장이 더 어려워집니다.</b></p>
+      <p><b>둘.</b> 이미 결정한 것을 되돌리는 일입니다. 오랜 논쟁 끝에 태스크와 점수를 분리했는데 다시 붙습니다. <b>"거의 처음부터 다시 설계가 들어가야 돼서 리스크가 커 보인다"</b></p></div></div>
 </div>`},
 
-/* 28 ─ 결론 */
-{sec:'CONCLUSION', title:'결론 방향', dark:true, html:`
+/* 29 ─ 10장 쟁점 4~6 */
+{sec:'10장 · 쟁점', title:'쟁점 4~6, 그리고 남은 확인', part:7, src:'10장 · 12장',
+why:'나머지 세 쟁점과 이 문서가 미확인으로 남긴 것을 정리합니다.',
+impact:'네 항목 모두 <b>AI팀 또는 개발팀 확인이 필요합니다.</b>', html:`
 <div class="hd cw">
-  <span class="eb">Conclusion &amp; Next Steps</span>
-  <h2>맞춤법 교정기에서 의미 번역기로</h2>
-  <p class="lead">가장 유력하게 논의된 방향입니다.</p>
+  <span class="eb">10. 미결 쟁점 · 12. 남은 확인</span>
+  <h2>쟁점 4~6, 그리고 남은 확인</h2>
 </div>
 <div class="cw">
-  <div class="card" style="border-color:rgba(140,124,255,.42); background:rgba(140,124,255,.14); margin-bottom:18px">
-    <p class="tx" style="font-size:14.6px; line-height:1.78; margin-top:0">맞춤법이 틀린 문장도 요즘 LLM은 찰떡같이 알아듣습니다. 그렇다면 그 데이터는 이미 AI-ready인 셈이죠.
-      그런데 우리는 지금 맞춤법을 하나하나 다 고치려 하고 있습니다. <b>억지로 다듬을 필요성이 줄었다는 것이 실측이 말해 주는 바</b>입니다.</p>
-    <p class="tx" style="font-size:14.6px; line-height:1.78">결국 중요한 것은 이 표가 무엇을 목적으로 어떻게 얻어졌는지를 에이전트가 알게 해주는 것입니다.
-      ${a('integ','Integrity')}와 ${a('consis','Consistency')}의 비중을 낮추고 <b>${a('ctx','Context')} 축의 비중을 키우는 구조</b>가 심도 있게 논의되었습니다.</p>
+  <div class="g3" style="gap:14px; margin-bottom:15px">
+    <div class="card sh"><span class="k">쟁점 4 · ${a('ipm','IPM')}을 어디에 둘 것인가</span>
+      <p class="tx sm" style="margin-top:2px"><b>전처리의 한 종류로.</b> 약국의 약이 전처리라면 환자가 운동하고 습관을 고치는 게 IPM이라는 관점입니다. 현재 방향이고 UI 작업이 필요합니다.</p>
+      <p class="tx sm"><b>진단 뒤 별도 단계로.</b> 진단을 끝내고 부족한 정보만 물은 뒤 다시 진단합니다. 진단이 두 번 돌고 점수도 두 번 나옵니다.</p>
+      <p class="tx sm"><b>상시 컨텍스트 관리 기능으로.</b> 언제든 수정하는 데이터 설명서 역할입니다. 이미 중장기 방향으로 정리된 안이고 2차 후속 범위입니다.</p></div>
+    <div class="card sh"><span class="k">쟁점 5 · 우리 제품은 누구를 위한 것인가</span>
+      <p class="tx sm" style="margin-top:2px">가장 오래된 쟁점인데 이번에는 성격이 달라졌습니다. <b>ML에 좋은 모듈과 LLM에 좋은 모듈이 다르다는 게 실측으로 확인되면서, 포지셔닝 질문이 아니라 어느 모듈을 남길지의 문제가 되었기 때문입니다.</b></p>
+      <p class="tx sm">갈리는 지점은 넷입니다. ML 모델용인가 에이전트용인가, 타겟이 엔지니어인가 데이터를 모르는 사람인가, 핵심이 진단기인가 시뮬레이터인가, 기존 업무에 붙는가 없던 업무를 설계하는가.</p>
+      <p class="tx sm mutetx">차별점의 근거가 결국 ${a('dts','DTS')}에 있다는 의견도 나왔습니다. 다만 경쟁사도 비슷한 것을 한다는 반론이 있었습니다.</p></div>
+    <div class="card sh"><span class="k">쟁점 6 · 점수가 몇 점으로 나오는 게 맞나</span>
+      <p class="tx sm" style="margin-top:2px">출발점은 문제 5입니다. ${a('reprod','재현성')}과 ${a('trace','추적성')}이 늘 100점이라 시작 점수가 높고 개선 폭이 작아 보입니다.</p>
+      <p class="tx sm">한쪽은 우리 기준에서 높으면 그게 AI-ready라는 반증이니 괜찮다는 관점, 다른 쪽은 개선 폭을 보여주려면 시작이 낮아야 한다는 관점입니다. 후자라면 올리기만 하면 충족되는 영역을 <b>업로드 전 원본 기준으로 계산</b>해 두 축을 낮출 수 있습니다.</p>
+      <p class="tx sm"><b>실제 개선 폭은 보통 4~5%</b>이고 10%를 넘기기 어렵습니다. 왜 그만큼인지 <b>설명할 화면이 지금 없습니다.</b></p></div>
   </div>
-  <div class="g3">
-    <div class="card"><span class="k">남은 확인 사항 1</span><p class="tx sm" style="margin-top:2px">${a('csm','CSM')}, ${a('cam','CAM')}, ${a('ram','RAM')}의 구체적 판정 임계값</p></div>
-    <div class="card"><span class="k">남은 확인 사항 2</span><p class="tx sm" style="margin-top:2px">${a('trust','trust_score')} 4개 지표를 6축에 반영하는 작업이 어디까지 진행되었는지</p></div>
-    <div class="card"><span class="k">남은 확인 사항 3</span><p class="tx sm" style="margin-top:2px">${a('usab','Usability')}, ${a('reprod','Reproducibility')}, ${a('trace','Traceability')} 세 축이 화면에서 실제로 어떤 값으로 표시되는지</p></div>
+  <div class="g2">
+    <div class="card hl"><span class="k v">가장 유력한 방향</span><div class="h3 sm">맞춤법 교정기에서 의미 번역기로</div>
+      <p class="tx sm">Integrity와 Consistency의 비중을 낮추고 Context 축의 비중을 키우는 구조가 심도 있게 논의되었습니다. 10장에서 본 <b>"컬럼 이름만 바꿔도 점수가 달라진다"</b>도 이 관점에서는 버그가 아니라, 성능이 실제로 달라지는 것을 점수가 반영한 결과가 됩니다.</p></div>
+    <div class="card bad"><span class="k r">이 문서에서 미확인으로 남은 것</span>
+      <ul class="li" style="margin-top:9px">
+        <li>${a('csm','CSM')}, ${a('cam','CAM')}, ${a('ram','RAM')}의 구체적 판정 임계값</li>
+        <li>10번·11번 노드가 정확히 어디까지 미사용인지</li>
+        <li>${a('trust','trust_score')} 4지표를 6축에 반영하는 작업이 어디까지 진행되었는지</li>
+        <li>${a('usab','Usability')}, ${a('reprod','Reproducibility')}, ${a('trace','Traceability')} 세 축이 화면에 실제로 어떤 값으로 표시되는지</li>
+      </ul></div>
   </div>
-  <div class="bn v" style="margin-top:18px">근거는 2026-08-06 발표 및 논의 녹취, Research 스페이스의 AI-ready Score 현황 문서, AI 스페이스의 산식 정리 문서와 EditData 모듈 문서, TARD 스페이스의 R5·R6 체크리스트, SynTitan 기획의 Proof Run PRD입니다. 위 세 항목은 모두 <b>AI팀 또는 개발팀 확인이 필요합니다.</b></div>
 </div>`}
 
 ];
 
 /* ═══════════════════════════════════════════════════════════
-   렌더링 · 네비게이션 · 주석
+   렌더링 · 진행 막대 · 좌표 카드 · 목차 · 주석
    ═══════════════════════════════════════════════════════════ */
 const deck = document.getElementById('deck');
 const W = 1440, H = 810;
 let idx = 0, k = 1;
+
+/* 파트별 슬라이드 범위를 미리 센다 */
+const pIdx = PARTS.map(() => []);
+SLIDES.forEach((s, i) => { if (s.part >= 0) pIdx[s.part].push(i); });
+
+/* 한 슬라이드의 진행 막대 HTML */
+function progressBar(i){
+  const p = SLIDES[i].part;
+  if (p < 0) return PARTS.map(part =>
+    `<span class="pseg" style="flex:1 0 0; --p:0%"><i></i><em>${part.lab}</em></span>`).join('');
+  return PARTS.map((part, n) => {
+    const list = pIdx[n];
+    let cls = '', fill = '0%';
+    if (n < p){ cls = ' done'; }
+    else if (n === p){ cls = ' cur'; fill = ((list.indexOf(i) + 1) / list.length * 100) + '%'; }
+    return `<span class="pseg${cls}" style="flex:${list.length} 0 0; --p:${fill}">`
+         + `<i></i><em>${n + 1}. ${part.lab}</em></span>`;
+  }).join('');
+}
+
+/* 오른쪽 좌표 카드 HTML */
+function orientCard(i){
+  const s = SLIDES[i];
+  if (s.part < 0){
+    return `<div class="oc">
+      <span class="ocp">들어가기 전에</span>
+      <div class="oct">${s.title}</div>
+      <div class="ocr"></div>
+      <div class="ocb"><span class="ocl">왜 필요한가</span><p>${s.why || ''}</p></div>
+      <div class="ocb"><span class="ocl">어디에 영향</span><p>${s.impact || ''}</p></div>
+      <div class="ochint">점선 단어를 클릭하면 이 자리에 설명이 붙습니다</div>
+    </div>`;
+  }
+  const part = PARTS[s.part];
+  const list = pIdx[s.part];
+  const pos = list.indexOf(i) + 1;
+  return `<div class="oc">
+    <span class="ocp">Part ${s.part + 1} / ${PARTS.length} · ${part.t}</span>
+    <div class="oct">${s.title}</div>
+    <div class="ocr"></div>
+    <div class="ocb"><span class="ocl">왜 필요한가</span><p>${s.why || ''}</p></div>
+    <div class="ocb"><span class="ocl">어디에 영향</span><p>${s.impact || ''}</p></div>
+    <div class="ochint">원문 ${s.src || '-'} · 이 파트 ${pos}/${list.length}장<br>점선 단어를 클릭하면 이 자리에 설명이 붙습니다</div>
+  </div>`;
+}
 
 SLIDES.forEach((s, i) => {
   const el = document.createElement('section');
@@ -1040,24 +1400,51 @@ SLIDES.forEach((s, i) => {
   el.dataset.i = i;
   el.innerHTML = s.html;
 
-  // 제목(.hd)만 남기고 나머지 본문 블록을 .bd로 감싼다
+  // 제목(.hd)만 남기고 나머지 본문 블록을 .bd > .fit 안으로 옮긴다
   const hd = el.querySelector(':scope > .hd');
   const bd = document.createElement('div');
   bd.className = 'bd';
-  [...el.children].forEach(c => { if (c !== hd) bd.appendChild(c); });
+  const ft = document.createElement('div');
+  ft.className = 'fit';
+  [...el.children].forEach(c => { if (c !== hd) ft.appendChild(c); });
+  bd.appendChild(ft);
   el.appendChild(bd);
 
+  // 전환 페이지는 전체 폭을 쓰므로 주석 여백을 두지 않는다
+  if (!s.cover && !s.divider){
+    el.insertAdjacentHTML('beforeend',
+      `<div class="rail">${orientCard(i)}</div><svg class="wires"></svg>`);
+  }
   if (!s.cover){
     el.insertAdjacentHTML('beforeend',
-      `<div class="rail"><div class="hint">단어를 클릭하면<br>여기에 설명이 붙습니다</div></div>
-       <svg class="wires"></svg>
-       <div class="foot"><span>${s.sec}</span><span class="ln"></span><span>${String(i+1).padStart(2,'0')} / ${String(SLIDES.length).padStart(2,'0')}</span></div>`);
+      `<div class="foot"><div class="pb">${progressBar(i)}</div>
+         <span class="pnum">${String(i+1).padStart(2,'0')} / ${String(SLIDES.length).padStart(2,'0')}</span></div>`);
   }
   deck.appendChild(el);
 });
 
 const slides = [...deck.querySelectorAll('.s')];
 document.getElementById('tot').textContent = SLIDES.length;
+
+/* ── 넘침 방지 ──
+   본문이 슬라이드 높이를 넘으면 그 슬라이드만 통째로 축소한다.
+   offsetHeight/clientHeight는 레이아웃 값이라 바깥 transform 영향을 받지 않는다. */
+function autofit(el){
+  const bd = el.querySelector(':scope > .bd');
+  const ft = bd && bd.querySelector(':scope > .fit');
+  if (!ft) return;
+  // 먼저 원래 크기로 되돌려 자연 높이를 잰다
+  ft.style.transform = '';
+  ft.style.height = '';
+  const avail = bd.clientHeight, need = ft.offsetHeight;
+  if (!avail || !need) return;
+  if (need > avail + 1){
+    const r = Math.max(0.70, avail / need);
+    ft.style.transform = `scale(${r})`;
+    ft.style.height = Math.ceil(need * r) + 'px';   // 축소된 만큼만 자리를 차지하게
+  }
+}
+function autofitAll(){ slides.forEach(autofit); }
 
 /* ── 뷰포트 맞춤 ── */
 function fit(){
@@ -1068,6 +1455,10 @@ function fit(){
 addEventListener('resize', () => { fit(); relayout(); });
 new ResizeObserver(() => { fit(); relayout(); }).observe(document.documentElement);
 fit();
+autofitAll();
+// 폰트가 늦게 오면 줄바꿈이 달라지므로 다시 잰다
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { autofitAll(); relayout(); });
+addEventListener('load', () => { autofitAll(); relayout(); });
 
 /* ── 슬라이드 이동 ── */
 function go(n){
@@ -1084,12 +1475,13 @@ function sync(){
   document.getElementById('bar').style.width = ((idx + 1) / SLIDES.length * 100) + '%';
   document.getElementById('bprev').disabled = idx === 0;
   document.getElementById('bnext').disabled = idx === SLIDES.length - 1;
-  [...document.querySelectorAll('#ovl a')].forEach((a, i) => a.classList.toggle('cur', i === idx));
+  [...document.querySelectorAll('#ovl a')].forEach(a =>
+    a.classList.toggle('cur', +a.dataset.i === idx));
 }
 slides[0].classList.add('on');
 sync();
 
-setTimeout(() => document.getElementById('help').classList.add('gone'), 7000);
+setTimeout(() => document.getElementById('help').classList.add('gone'), 8000);
 
 document.getElementById('bprev').onclick = () => go(idx - 1);
 document.getElementById('bnext').onclick = () => go(idx + 1);
@@ -1114,13 +1506,34 @@ addEventListener('keydown', e => {
   if (e.key === 'End') go(SLIDES.length - 1);
 });
 
-/* ── 목차 ── */
+/* ── 목차 · 파트별로 묶어서 보여준다 ── */
 const ovl = document.getElementById('ovl');
-SLIDES.forEach((s, i) => {
+function tocLink(i){
   const a = document.createElement('a');
-  a.innerHTML = `<span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${s.title}</span><span class="g">${s.sec}</span>`;
+  a.dataset.i = i;
+  a.innerHTML = `<span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${SLIDES[i].title}</span>`;
   a.onclick = () => { go(i); document.getElementById('ov').classList.remove('on'); };
-  ovl.appendChild(a);
+  return a;
+}
+{
+  const cover = document.createElement('div');
+  cover.className = 'grp';
+  cover.innerHTML = `<div class="gh"><span class="gn">00</span><span class="gt">표지</span></div>`;
+  const cl = document.createElement('div'); cl.className = 'gl';
+  SLIDES.forEach((s, i) => { if (s.part < 0) cl.appendChild(tocLink(i)); });
+  cover.appendChild(cl); ovl.appendChild(cover);
+}
+PARTS.forEach((part, n) => {
+  const list = pIdx[n];
+  if (!list.length) return;
+  const g = document.createElement('div');
+  g.className = 'grp';
+  g.innerHTML = `<div class="gh"><span class="gn">Part ${n+1}</span><span class="gt">${part.t}</span>`
+    + `<span class="gw">${String(list[0]+1).padStart(2,'0')}–${String(list[list.length-1]+1).padStart(2,'0')} · ${list.length}장</span></div>`;
+  const gl = document.createElement('div'); gl.className = 'gl';
+  list.forEach(i => gl.appendChild(tocLink(i)));
+  g.appendChild(gl);
+  ovl.appendChild(g);
 });
 document.getElementById('btoc').onclick = () => document.getElementById('ov').classList.toggle('on');
 
@@ -1178,7 +1591,7 @@ function termId(el){
   return el.dataset.tid;
 }
 
-/* 카드 위치 계산 + 연결선 */
+/* 주석 카드 위치 계산 + 연결선 */
 function relayout(){
   const slide = slides[idx];
   const rail = slide.querySelector('.rail');
